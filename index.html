@@ -424,16 +424,13 @@ body.light-mode .app-header h1{
   </button>
 </header>
 
-<!-- Action Bar -->
-<div class="action-bar">
-  <button class="action-btn share" onclick="shareApp()">
+<!-- Share Bar -->
+<div style="padding:0 14px 8px;text-align:center">
+  <button class="action-btn share" onclick="shareApp()" style="width:100%;max-width:400px;margin:0 auto">
     <svg viewBox="0 0 24 24"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
-    SHARE
+    SEND TO STEFANIA
   </button>
-  <button class="action-btn add-home" onclick="addToHome()">
-    <svg viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12" y2="18.01"/></svg>
-    ADD TO PHONE
-  </button>
+  <div style="font-size:.55rem;color:var(--dim);margin-top:6px;letter-spacing:.3px">To save as an app: tap Safari's <span style="font-size:.7rem">&#8593;</span> button in the toolbar below, then "Add to Home Screen"</div>
 </div>
 
 <!-- TAB: SCHEDULE -->
@@ -1639,27 +1636,24 @@ function restoreMode() {
 // ═══════════════════════════════════════
 function shareApp() {
   const url = 'https://mavvie-droid.github.io/coachella-hq/';
-  if (navigator.share) {
-    navigator.share({ title: 'PALMCHELLA', text: 'Our Coachella Weekend 2 guide!', url }).catch(() => {});
-  } else {
-    navigator.clipboard.writeText(url).then(() => {
-      const btn = document.querySelector('.action-btn.share');
-      const orig = btn.innerHTML;
-      btn.textContent = 'COPIED!';
-      setTimeout(() => { btn.innerHTML = orig; }, 1500);
-    });
-  }
-}
-function addToHome() {
-  const url = 'https://mavvie-droid.github.io/coachella-hq/';
-  // Try native share sheet first -- on Safari iOS this may include "Add to Home Screen"
-  if (navigator.share) {
-    navigator.share({ title: 'PALMCHELLA', url }).catch(() => {});
-  } else {
-    navigator.clipboard.writeText(url).then(() => {
-      alert('Link copied! Open Safari and paste it, then use Safari\'s Share button to Add to Home Screen.');
-    }).catch(() => {});
-  }
+  const text = 'Our Coachella W2 guide: ' + url;
+  const btn = document.querySelector('.action-btn.share');
+  const orig = btn.innerHTML;
+
+  // Copy to clipboard first (always works)
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.position = 'fixed';
+  ta.style.opacity = '0';
+  document.body.appendChild(ta);
+  ta.select();
+  document.execCommand('copy');
+  document.body.removeChild(ta);
+
+  btn.innerHTML = '<svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12" stroke="currentColor" fill="none" stroke-width="2.5"/></svg> LINK COPIED -- PASTE IN TEXTS';
+  btn.style.borderColor = 'rgba(34,197,94,.4)';
+  btn.style.color = 'var(--green)';
+  setTimeout(() => { btn.innerHTML = orig; btn.style.borderColor = ''; btn.style.color = ''; }, 3000);
 }
 
 // ═══════════════════════════════════════
