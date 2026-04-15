@@ -407,6 +407,53 @@ body.light-mode .app-header h1{
 .now-card .now-meta{font-size:.72rem;color:var(--desc);margin-top:2px}
 .now-card .now-next{margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,215,0,.1)}
 .now-card .now-next-label{font-size:.55rem;font-weight:700;letter-spacing:1.5px;color:var(--dim)}
+/* ── Countdown ── */
+.countdown-card{
+  background:linear-gradient(135deg,rgba(255,215,0,.08),rgba(255,59,139,.04),rgba(0,212,255,.04));
+  border:1px solid rgba(255,215,0,.2);border-radius:18px;
+  padding:18px 16px;margin-bottom:14px;text-align:center;
+}
+.countdown-card .cd-label{font-size:.6rem;font-weight:700;letter-spacing:3px;color:var(--gold)}
+.countdown-card .cd-numbers{display:flex;justify-content:center;gap:12px;margin:12px 0 8px}
+.countdown-card .cd-unit{
+  background:rgba(255,255,255,.04);border:1px solid var(--border);
+  border-radius:12px;padding:10px 14px;min-width:58px;
+}
+.countdown-card .cd-val{font-size:1.6rem;font-weight:800;color:var(--gold);line-height:1}
+.countdown-card .cd-lbl{font-size:.5rem;font-weight:600;letter-spacing:1.5px;color:var(--dim);margin-top:4px}
+.countdown-card .cd-sub{font-size:.65rem;color:var(--desc)}
+/* ── Weather Strip ── */
+.weather-strip{
+  display:flex;gap:6px;margin-bottom:14px;overflow-x:auto;scrollbar-width:none;
+}
+.weather-strip::-webkit-scrollbar{display:none}
+.weather-day{
+  flex:1;min-width:75px;background:var(--card);border:1px solid var(--border);
+  border-radius:12px;padding:10px 8px;text-align:center;
+}
+.weather-day .wd-day{font-size:.6rem;font-weight:700;letter-spacing:1px}
+.weather-day .wd-temp{font-size:1rem;font-weight:800;margin:4px 0 2px}
+.weather-day .wd-lo{font-size:.6rem;color:var(--dim)}
+.weather-day .wd-desc{font-size:.55rem;color:var(--desc);margin-top:3px}
+.weather-day.today{border-color:rgba(255,215,0,.3);background:rgba(255,215,0,.04)}
+/* ── Day Planner ── */
+.planner-hour{
+  display:flex;gap:10px;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.03);
+  min-height:32px;align-items:flex-start;
+}
+.planner-time{
+  font-size:.65rem;font-weight:700;color:var(--dim);width:50px;flex-shrink:0;
+  padding-top:2px;text-align:right;
+}
+.planner-events{flex:1;display:flex;flex-direction:column;gap:4px}
+.planner-event{
+  font-size:.7rem;padding:6px 10px;border-radius:8px;line-height:1.3;
+}
+.planner-event.pe-set{background:rgba(255,215,0,.06);border-left:2px solid var(--gold);color:var(--text)}
+.planner-event.pe-free{background:rgba(34,197,94,.05);border-left:2px solid var(--green);color:var(--green)}
+.planner-event.pe-food{background:rgba(249,115,22,.05);border-left:2px solid var(--orange);color:var(--orange)}
+.planner-event.pe-move{background:rgba(0,212,255,.04);border-left:2px solid var(--fri);color:var(--fri);font-style:italic}
+.planner-event.pe-rest{background:rgba(168,85,247,.04);border-left:2px solid var(--sat);color:var(--sat)}
 @media(min-width:700px){
   .tab{padding:16px 20px 24px}
   .set-card{padding:14px 18px}
@@ -442,11 +489,16 @@ body.light-mode .app-header h1{
 
 <!-- TAB: MY PLAN -->
 <div class="tab" id="tab-plan">
-  <div style="text-align:center;margin-bottom:12px">
-    <div style="font-size:.65rem;font-weight:700;letter-spacing:2px;color:var(--gold)">YOUR ITINERARY</div>
-    <div style="font-size:.6rem;color:var(--dim);margin-top:2px">Combined picks with walking directions</div>
-  </div>
+  <div id="countdown-section"></div>
+  <div id="weather-section"></div>
   <div id="now-section"></div>
+  <div class="day-pills" style="margin-bottom:10px">
+    <div class="day-pill fri" onclick="setPlanDay('friday')">FRI</div>
+    <div class="day-pill sat" onclick="setPlanDay('saturday')">SAT</div>
+    <div class="day-pill sun" onclick="setPlanDay('sunday')">SUN</div>
+    <div class="day-pill" onclick="setPlanDay('all')" style="border-color:rgba(255,215,0,.2);color:var(--gold)">ALL</div>
+  </div>
+  <div id="planner-section"></div>
   <div id="plan-list"></div>
 </div>
 
@@ -1082,6 +1134,18 @@ const INFO_SECTIONS = [
 <li>Nobu Omakase (Red Bull Mirage): $375/person</li>
 </ul>
 <div style="margin-top:10px;font-weight:600;color:var(--desc)">Pro tip: Budget $50-75/day for food + drinks. Eat before you arrive to save money. Hit the free Starbucks early. The Buldak Crawl items are worth trying.</div>`},
+{title:'Emergency Info',icon:'alert',body:`<ul>
+<li><strong>Medical Tents:</strong> Clearly marked on the festival map and Coachella app. Staffed with EMTs. If you feel overheated, dizzy, or dehydrated, go immediately. They have IV drips for severe cases.</li>
+<li><strong>Text for Help:</strong> Text "HELP" to the number on your wristband for non-emergency medical assistance.</li>
+<li><strong>Security:</strong> Uniformed staff throughout. Find any staff member for help.</li>
+<li><strong>Lost & Found:</strong> Located at the Guest Services tent near the main entrance. Also check the Coachella app after the festival -- items are cataloged.</li>
+<li><strong>Phone Charging:</strong> VIP Charging Lockers ($89 for the weekend, unlimited access). Alaska Airlines activation has free charging. Red Bull Mirage has outlets on upper levels. Bring your own portable charger (you packed 2!).</li>
+<li><strong>Phone died? Meetup spot:</strong> Pick a physical spot with Stefania NOW before you go. The Ferris wheel is easy to find and a classic meetup landmark.</li>
+<li><strong>If separated:</strong> Head to your pre-agreed meetup spot. Don't wander -- cell service is terrible in crowds.</li>
+<li><strong>Nearest hospital:</strong> JFK Memorial Hospital, 47111 Monroe St, Indio (5 min from venue). Call 911 for emergencies.</li>
+<li><strong>Police/Safety:</strong> Indio PD has a presence on-site. Report theft or incidents to any staff member.</li>
+<li><strong>Heat safety:</strong> It will be 88-89F. Drink water constantly. Wear sunscreen. Take shade breaks. Signs of heat exhaustion: headache, nausea, dizziness, rapid pulse. Go to medical immediately.</li>
+</ul>`},
 {title:'RSVP Links & Bookings',icon:'link',body:`<ul>
 <li><strong>Radiohead Kid A MNESIA Bunker:</strong> Reserve your free timed slot at <a href="https://fanaccount.axs.com/coachella/login" style="color:var(--fri)">fanaccount.axs.com/coachella/login</a>. Fri/Sat: 2pm, 4:15, 6:30, 8:45, 11pm. Sun: 1:15, 3:30, 5:45, 8, 10:15pm.</li>
 <li><strong>Red Bull Mirage upper levels:</strong> Sign up for text alerts at <a href="https://www.redbull.com/us-en/events/mirage" style="color:var(--fri)">redbull.com/us-en/events/mirage</a> for daily access passes + surprise perks.</li>
@@ -1351,8 +1415,9 @@ function setStage(stage) {
 function renderPlan() {
   const list = document.getElementById('plan-list');
   let html = '';
+  const daysToShow = planDay === 'all' ? DAYS : [planDay];
 
-  DAYS.forEach(day => {
+  daysToShow.forEach(day => {
     const dc = DAY_CLASS[day];
     // Combined: union of both favorites
     let sets = SCHEDULE[day].filter(s => mavvieFavs.has(s.id) || stefFavs.has(s.id));
@@ -1809,6 +1874,168 @@ function updateGeoDot(lat, lng, accuracy) {
 }
 
 // ═══════════════════════════════════════
+// COUNTDOWN TIMER
+// ═══════════════════════════════════════
+function renderCountdown() {
+  const el = document.getElementById('countdown-section');
+  // Flight departs JFK Apr 17, 11:30 AM ET
+  const flight = new Date('2026-04-17T11:30:00-04:00');
+  const now = new Date();
+  const diff = flight - now;
+
+  if (diff <= 0) {
+    // Past flight time -- check if during festival
+    const festEnd = new Date('2026-04-20T23:59:00-07:00');
+    if (now <= festEnd) {
+      el.innerHTML = `<div class="countdown-card">
+        <div class="cd-label">YOU'RE AT COACHELLA</div>
+        <div style="font-size:1.2rem;font-weight:800;color:var(--gold);margin:8px 0">HAVE THE BEST TIME</div>
+        <div class="cd-sub">Stay hydrated. Wear sunscreen. Find the speakeasies.</div>
+      </div>`;
+    } else {
+      el.innerHTML = '';
+    }
+    return;
+  }
+
+  const days = Math.floor(diff / 86400000);
+  const hrs = Math.floor((diff % 86400000) / 3600000);
+  const mins = Math.floor((diff % 3600000) / 60000);
+  const secs = Math.floor((diff % 60000) / 1000);
+
+  el.innerHTML = `<div class="countdown-card">
+    <div class="cd-label">PALMCHELLA STARTS IN</div>
+    <div class="cd-numbers">
+      <div class="cd-unit"><div class="cd-val">${days}</div><div class="cd-lbl">DAYS</div></div>
+      <div class="cd-unit"><div class="cd-val">${hrs}</div><div class="cd-lbl">HRS</div></div>
+      <div class="cd-unit"><div class="cd-val">${mins}</div><div class="cd-lbl">MIN</div></div>
+      <div class="cd-unit"><div class="cd-val">${secs}</div><div class="cd-lbl">SEC</div></div>
+    </div>
+    <div class="cd-sub">Alaska AS2A -- JFK 11:30 AM to Palm Springs 2:43 PM</div>
+  </div>`;
+}
+
+// ═══════════════════════════════════════
+// WEATHER STRIP
+// ═══════════════════════════════════════
+const WEATHER = [
+  {day:'THU',date:'4/17',hi:84,lo:59,desc:'Hazy sun',travel:true},
+  {day:'FRI',date:'4/18',hi:88,lo:66,desc:'Mostly sunny'},
+  {day:'SAT',date:'4/19',hi:89,lo:63,desc:'Partly sunny'},
+  {day:'SUN',date:'4/20',hi:80,lo:62,desc:'Not as warm'},
+];
+function renderWeather() {
+  const el = document.getElementById('weather-section');
+  const pt = getNowPT();
+  const todayDate = pt.getDate();
+  el.innerHTML = '<div class="weather-strip">' + WEATHER.map(w => {
+    const d = parseInt(w.date.split('/')[1]);
+    const isToday = todayDate === d && pt.getMonth() === 3;
+    return `<div class="weather-day${isToday?' today':''}">
+      <div class="wd-day">${w.day}</div>
+      <div class="wd-temp">${w.hi}°</div>
+      <div class="wd-lo">${w.lo}° low</div>
+      <div class="wd-desc">${w.desc}</div>
+      ${w.travel?'<div style="font-size:.5rem;color:var(--fri);margin-top:2px">TRAVEL DAY</div>':''}
+    </div>`;
+  }).join('') + '</div>';
+}
+
+// ═══════════════════════════════════════
+// DAY PLANNER
+// ═══════════════════════════════════════
+let planDay = 'all';
+function setPlanDay(d) {
+  planDay = d;
+  document.querySelectorAll('#tab-plan .day-pill').forEach(p => {
+    if (d === 'all') p.classList.toggle('active', p.textContent === 'ALL');
+    else p.classList.toggle('active', p.classList.contains(DAY_CLASS[d] || ''));
+  });
+  renderDayPlanner();
+  renderPlan();
+}
+
+function renderDayPlanner() {
+  const el = document.getElementById('planner-section');
+  const days = planDay === 'all' ? DAYS : [planDay];
+  let html = '';
+
+  days.forEach(day => {
+    const dc = DAY_CLASS[day];
+    const sets = SCHEDULE[day]
+      .filter(s => mavvieFavs.has(s.id) || stefFavs.has(s.id))
+      .filter(s => !s.tbd)
+      .sort((a,b) => a.start - b.start);
+
+    if (sets.length === 0) return;
+
+    html += `<div class="plan-day-header ${dc}-h">${DAY_LABELS[day]} -- HOUR BY HOUR</div>`;
+
+    // Build hour-by-hour from first set to last
+    const firstHour = Math.floor(sets[0].start / 60);
+    const lastEnd = Math.max(...sets.map(s => s.end));
+    const lastHour = Math.ceil(lastEnd / 60);
+
+    for (let h = firstHour; h <= lastHour; h++) {
+      const hourStart = h * 60;
+      const hourEnd = (h + 1) * 60;
+      const events = [];
+
+      // Check for sets starting or playing during this hour
+      sets.forEach(s => {
+        if (s.start >= hourStart && s.start < hourEnd) {
+          events.push({type:'set', text:`${s.artist} starts (${s.stage})`, time:s.start});
+        }
+      });
+
+      // Walking directions for sets starting this hour
+      sets.forEach((s, i) => {
+        if (s.start >= hourStart && s.start < hourEnd && i > 0) {
+          const prev = sets[i-1];
+          if (prev.stage !== s.stage) {
+            const walk = getWalk(prev.stage, s.stage);
+            const leaveAt = s.start - walk;
+            if (leaveAt >= hourStart - 60 && leaveAt < hourEnd) {
+              events.push({type:'move', text:`Walk ${prev.stage} to ${s.stage} (${walk}min)`, time:leaveAt});
+            }
+          }
+        }
+      });
+
+      // Free stuff at specific times
+      if (h === 15 && (day === 'friday' || day === 'saturday' || day === 'sunday')) {
+        events.push({type:'free', text:'Red Bull Mirage free slushies start now!', time:t(15,0)});
+      }
+      if (h === 13) {
+        events.push({type:'free', text:'Gates open. Hit Starbucks for free drinks.', time:t(13,0)});
+      }
+
+      // Suggest rest if 3+ hours of consecutive sets
+      const activeSets = sets.filter(s => s.start < hourEnd && s.end > hourStart);
+      if (h > firstHour + 3 && activeSets.length === 0 && events.length === 0) {
+        const nextSet = sets.find(s => s.start >= hourStart);
+        if (nextSet && nextSet.start - hourStart < 120) {
+          events.push({type:'rest', text:'Break -- hydrate, rest, sunscreen. Hit a pop-up or speakeasy.', time:hourStart});
+        }
+      }
+
+      if (events.length === 0) continue;
+
+      events.sort((a,b) => a.time - b.time);
+
+      html += `<div class="planner-hour">
+        <div class="planner-time">${fmtTime(hourStart)}</div>
+        <div class="planner-events">
+          ${events.map(e => `<div class="planner-event pe-${e.type}">${e.text}</div>`).join('')}
+        </div>
+      </div>`;
+    }
+  });
+
+  el.innerHTML = html;
+}
+
+// ═══════════════════════════════════════
 // WHAT'S HAPPENING NOW
 // ═══════════════════════════════════════
 function renderNowSection() {
@@ -1891,18 +2118,23 @@ function init() {
 
   renderStageFilters();
   renderSchedule();
+  renderCountdown();
+  renderWeather();
   renderNowSection();
+  renderDayPlanner();
   renderPlan();
   renderExploreCats();
   renderExplore();
   renderPacking();
   renderInfo();
   initNotifs();
+  setPlanDay('all');
 
-  // Update live badges and now section every minute
+  // Update countdown every second, other stuff every minute
+  setInterval(renderCountdown, 1000);
   setInterval(() => {
     if (currentTab === 'schedule') renderSchedule();
-    if (currentTab === 'plan') { renderNowSection(); renderPlan(); }
+    if (currentTab === 'plan') { renderNowSection(); renderDayPlanner(); renderPlan(); }
   }, 60000);
 }
 
