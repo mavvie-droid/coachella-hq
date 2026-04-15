@@ -9,7 +9,7 @@
 <meta name="apple-mobile-web-app-title" content="Palmchella">
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon.svg" type="image/svg+xml">
-<link rel="apple-touch-icon" href="icon.svg">
+<link rel="apple-touch-icon" sizes="180x180" href="icon-180.png">
 <title>PALMCHELLA</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -876,19 +876,31 @@ const INFO_SECTIONS = [
   <div class="map-stage sonora">SONORA</div>
   <div class="map-stage yuma">YUMA</div>
   <div class="map-stage quasar">QUASAR</div>
-  <span class="map-walk" style="left:18%;top:30%">5min</span>
-  <span class="map-walk" style="left:30%;top:20%">8min</span>
-  <span class="map-walk" style="left:48%;top:22%">3min</span>
-  <span class="map-walk" style="left:68%;top:20%">8min</span>
-  <span class="map-walk" style="right:14%;top:38%">5min</span>
-  <span class="map-walk" style="right:14%;top:62%">5min</span>
-  <span class="map-walk" style="left:30%;top:55%">8min</span>
-  <span class="map-walk" style="left:12%;top:70%">10min</span>
-  <span class="map-walk" style="left:50%;top:10%;font-size:.45rem;opacity:.5">-- 12 min end to end --</span>
+  <svg style="position:absolute;inset:0;width:100%;height:100%;z-index:1;pointer-events:none" viewBox="0 0 400 300" preserveAspectRatio="none">
+    <defs><marker id="ah" markerWidth="6" markerHeight="4" refX="5" refY="2" orient="auto"><polygon points="0 0, 6 2, 0 4" fill="rgba(255,215,0,.4)"/></marker></defs>
+    <line x1="60" y1="58" x2="60" y2="122" stroke="rgba(255,215,0,.3)" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#ah)"/>
+    <text x="70" y="93" fill="#FFD700" font-size="10" font-weight="700" font-family="sans-serif">5m</text>
+    <line x1="90" y1="42" x2="155" y2="80" stroke="rgba(168,85,247,.25)" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#ah)"/>
+    <text x="108" y="54" fill="#A855F7" font-size="10" font-weight="700" font-family="sans-serif">8m</text>
+    <line x1="195" y1="88" x2="235" y2="88" stroke="rgba(168,85,247,.25)" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#ah)"/>
+    <text x="205" y="82" fill="#A855F7" font-size="10" font-weight="700" font-family="sans-serif">3m</text>
+    <line x1="275" y1="82" x2="325" y2="48" stroke="rgba(255,59,139,.25)" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#ah)"/>
+    <text x="290" y="58" fill="#FF3B8B" font-size="10" font-weight="700" font-family="sans-serif">8m</text>
+    <line x1="340" y1="58" x2="318" y2="142" stroke="rgba(0,212,255,.25)" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#ah)"/>
+    <text x="335" y="102" fill="#00D4FF" font-size="10" font-weight="700" font-family="sans-serif">5m</text>
+    <line x1="312" y1="170" x2="332" y2="218" stroke="rgba(0,212,255,.25)" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#ah)"/>
+    <text x="328" y="198" fill="#00D4FF" font-size="10" font-weight="700" font-family="sans-serif">5m</text>
+    <line x1="85" y1="158" x2="112" y2="225" stroke="rgba(255,255,255,.12)" stroke-width="1" stroke-dasharray="3,4" marker-end="url(#ah)"/>
+    <text x="62" y="195" fill="rgba(255,255,255,.35)" font-size="9" font-family="sans-serif">8m</text>
+    <line x1="90" y1="25" x2="320" y2="25" stroke="rgba(255,255,255,.08)" stroke-width="1" stroke-dasharray="2,4"/>
+    <text x="158" y="20" fill="rgba(255,255,255,.3)" font-size="9" font-weight="600" font-family="sans-serif">Main to Sahara = 12 min</text>
+    <polygon points="322,22 322,28 328,25" fill="rgba(255,255,255,.2)"/>
+    <polygon points="90,22 90,28 84,25" fill="rgba(255,255,255,.2)"/>
+  </svg>
   <div class="geo-dot" id="geo-dot" style="display:none"><span class="geo-label">YOU</span></div>
 </div>
 <div class="geo-status" id="geo-status"></div>
-<div class="map-legend">Approximate walking times between stages. MAIN to SAHARA = 12 min across the whole field.</div>
+<div class="map-legend">Arrows show walking paths with times. Green dot tracks your live position at the venue.</div>
 </div>`},
 {title:'Rest Areas, Water & Chill Spots',icon:'chill',body:`<div style="color:var(--gold);font-weight:700;margin-bottom:8px">Where to cool down, hydrate, and recover:</div>
 <ul>
@@ -1640,27 +1652,13 @@ function shareApp() {
 }
 function addToHome() {
   const url = 'https://mavvie-droid.github.io/coachella-hq/';
-  const isSafari = /^((?!chrome|android|crios|fxios).)*safari/i.test(navigator.userAgent);
-  const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
-
-  if (isStandalone) {
-    alert('You\'re already using it as an app!');
-    return;
-  }
-
-  if (isSafari) {
-    alert('Look at Safari\'s bottom toolbar (not this app\'s buttons).\n\n1. Tap the Share icon -- the box with an upward arrow in Safari\'s toolbar at the very bottom of your screen\n\n2. Scroll DOWN in that menu\n\n3. Tap "Add to Home Screen"\n\n4. It\'ll show up as "Palmchella" with the palm tree icon!');
+  // Try native share sheet first -- on Safari iOS this may include "Add to Home Screen"
+  if (navigator.share) {
+    navigator.share({ title: 'PALMCHELLA', url }).catch(() => {});
   } else {
-    // Not in Safari -- copy link and tell them to open in Safari
     navigator.clipboard.writeText(url).then(() => {
-      const btn = document.querySelector('.action-btn.add-home');
-      const orig = btn.innerHTML;
-      btn.innerHTML = '<svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> LINK COPIED';
-      btn.style.borderColor = 'rgba(34,197,94,.4)';
-      btn.style.color = 'var(--green)';
-      setTimeout(() => { btn.innerHTML = orig; btn.style.borderColor = ''; btn.style.color = ''; }, 3000);
+      alert('Link copied! Open Safari and paste it, then use Safari\'s Share button to Add to Home Screen.');
     }).catch(() => {});
-    alert('Link copied! Open Safari, paste the link, then tap Safari\'s Share button (box with arrow at the bottom) and tap "Add to Home Screen."\n\nThis only works in Safari -- Apple doesn\'t let other browsers do it.');
   }
 }
 
@@ -1690,30 +1688,36 @@ function startGeo() {
 function updateGeoDot(lat, lng, accuracy) {
   const dot = document.getElementById('geo-dot');
   const status = document.getElementById('geo-status');
+  if (!dot) return;
 
-  // Check if within venue bounds (with some padding)
-  const pad = 0.002; // ~200m buffer
+  // Check if within venue bounds
+  const pad = 0.003;
   const inVenue = lat >= VENUE.south - pad && lat <= VENUE.north + pad &&
                   lng >= VENUE.west - pad && lng <= VENUE.east + pad;
 
   if (!inVenue) {
-    dot.style.display = 'none';
-    status.textContent = 'You\'re not at the venue yet. The green dot will appear when you\'re on the grounds.';
+    // Show dot at bottom-center as "off venue" indicator
+    dot.style.display = 'block';
+    dot.style.left = '50%';
+    dot.style.top = '92%';
+    dot.querySelector('.geo-label').textContent = 'YOU (not at venue)';
+    dot.style.opacity = '.5';
+    status.textContent = 'You\'re not at the venue yet. Dot will track your position live once you arrive.';
     return;
   }
 
   // Map lat/lng to percentage position on the map
   const xPct = ((lng - VENUE.west) / (VENUE.east - VENUE.west)) * 100;
   const yPct = ((VENUE.north - lat) / (VENUE.north - VENUE.south)) * 100;
-
-  // Clamp to map bounds
   const x = Math.max(5, Math.min(95, xPct));
   const y = Math.max(5, Math.min(95, yPct));
 
   dot.style.display = 'block';
+  dot.style.opacity = '1';
   dot.style.left = x + '%';
   dot.style.top = y + '%';
-  status.textContent = accuracy < 30 ? 'Live location (GPS)' : `Live location (~${Math.round(accuracy)}m accuracy)`;
+  dot.querySelector('.geo-label').textContent = 'YOU';
+  status.textContent = accuracy < 30 ? 'Live GPS tracking' : `Live tracking (~${Math.round(accuracy)}m)`;
 }
 
 // ═══════════════════════════════════════
