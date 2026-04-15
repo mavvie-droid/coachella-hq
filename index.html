@@ -1632,20 +1632,35 @@ function shareApp() {
   } else {
     navigator.clipboard.writeText(url).then(() => {
       const btn = document.querySelector('.action-btn.share');
+      const orig = btn.innerHTML;
       btn.textContent = 'COPIED!';
-      setTimeout(() => { btn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg> SHARE'; }, 1500);
+      setTimeout(() => { btn.innerHTML = orig; }, 1500);
     });
   }
 }
 function addToHome() {
-  const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
-  const isAndroid = /android/i.test(navigator.userAgent);
-  if (isIOS) {
-    alert('Tap the Share button (box with arrow) in Safari\'s bottom bar, then scroll down and tap "Add to Home Screen"');
-  } else if (isAndroid) {
-    alert('Tap the three-dot menu in Chrome, then tap "Add to Home Screen" or "Install App"');
+  const url = 'https://mavvie-droid.github.io/coachella-hq/';
+  const isSafari = /^((?!chrome|android|crios|fxios).)*safari/i.test(navigator.userAgent);
+  const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+
+  if (isStandalone) {
+    alert('You\'re already using it as an app!');
+    return;
+  }
+
+  if (isSafari) {
+    alert('Look at Safari\'s bottom toolbar (not this app\'s buttons).\n\n1. Tap the Share icon -- the box with an upward arrow in Safari\'s toolbar at the very bottom of your screen\n\n2. Scroll DOWN in that menu\n\n3. Tap "Add to Home Screen"\n\n4. It\'ll show up as "Palmchella" with the palm tree icon!');
   } else {
-    alert('In your browser menu, look for "Install App" or "Add to Home Screen"');
+    // Not in Safari -- copy link and tell them to open in Safari
+    navigator.clipboard.writeText(url).then(() => {
+      const btn = document.querySelector('.action-btn.add-home');
+      const orig = btn.innerHTML;
+      btn.innerHTML = '<svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> LINK COPIED';
+      btn.style.borderColor = 'rgba(34,197,94,.4)';
+      btn.style.color = 'var(--green)';
+      setTimeout(() => { btn.innerHTML = orig; btn.style.borderColor = ''; btn.style.color = ''; }, 3000);
+    }).catch(() => {});
+    alert('Link copied! Open Safari, paste the link, then tap Safari\'s Share button (box with arrow at the bottom) and tap "Add to Home Screen."\n\nThis only works in Safari -- Apple doesn\'t let other browsers do it.');
   }
 }
 
