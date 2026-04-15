@@ -1,0 +1,1467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>CoachellaHQ</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{
+  --bg:#0a0a0a;--bg2:#131315;--text:#fff;--dim:rgba(255,255,255,.35);--desc:rgba(255,255,255,.55);
+  --border:rgba(255,255,255,.08);--card:rgba(255,255,255,.03);--card-hover:rgba(255,255,255,.06);
+  --gold:#FFD700;--gold-dim:rgba(255,215,0,.15);--gold-glow:rgba(255,215,0,.08);
+  --fri:#00D4FF;--sat:#A855F7;--sun:#FF3B8B;
+  --fri-bg:rgba(0,212,255,.06);--sat-bg:rgba(168,85,247,.06);--sun-bg:rgba(255,59,139,.06);
+  --fri-border:rgba(0,212,255,.2);--sat-border:rgba(168,85,247,.2);--sun-border:rgba(255,59,139,.2);
+  --green:#22c55e;--red:#ef4444;--orange:#f97316;
+  --nav-h:68px;--header-h:64px;
+}
+html{background:var(--bg)}
+body{
+  background:radial-gradient(ellipse at 50% 30%,var(--bg2) 0%,var(--bg) 70%);
+  color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+  min-height:100vh;min-height:100dvh;overflow-x:hidden;
+  padding-bottom:calc(var(--nav-h) + env(safe-area-inset-bottom,0px) + 8px);
+}
+/* ── Header ── */
+.app-header{
+  position:sticky;top:0;z-index:100;
+  background:rgba(10,10,10,.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  padding:14px 16px 10px;text-align:center;
+  border-bottom:1px solid var(--border);
+}
+.app-header h1{
+  font-size:1.4rem;font-weight:800;letter-spacing:3px;
+  background:linear-gradient(135deg,#FFE44D,#FFD700,#FFEA00,#FFD700,#FFE44D);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.header-line{
+  width:180px;height:2px;margin:8px auto 0;border-radius:2px;
+  background:linear-gradient(to right,var(--fri),var(--sat),var(--sun),var(--gold));
+}
+/* ── Bottom Nav ── */
+.bottom-nav{
+  position:fixed;bottom:0;left:0;right:0;z-index:200;
+  background:rgba(10,10,10,.95);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border-top:1px solid var(--border);
+  display:flex;justify-content:space-around;align-items:center;
+  height:var(--nav-h);padding-bottom:env(safe-area-inset-bottom,0px);
+}
+.nav-btn{
+  display:flex;flex-direction:column;align-items:center;gap:3px;
+  background:none;border:none;color:var(--dim);font-size:.6rem;
+  font-weight:600;letter-spacing:.5px;cursor:pointer;padding:8px 12px;
+  transition:color .2s;font-family:inherit;
+}
+.nav-btn svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.nav-btn.active{color:var(--gold)}
+/* ── Tab Content ── */
+.tab{display:none;padding:12px 14px 20px;max-width:700px;margin:0 auto}
+.tab.active{display:block}
+/* ── Day Pills ── */
+.day-pills{display:flex;gap:8px;margin-bottom:14px;justify-content:center}
+.day-pill{
+  padding:8px 24px;border-radius:20px;font-size:.75rem;font-weight:700;
+  letter-spacing:1.5px;cursor:pointer;border:1px solid var(--border);
+  background:var(--card);transition:all .2s;
+}
+.day-pill.fri.active{background:var(--fri-bg);border-color:var(--fri-border);color:var(--fri)}
+.day-pill.sat.active{background:var(--sat-bg);border-color:var(--sat-border);color:var(--sat)}
+.day-pill.sun.active{background:var(--sun-bg);border-color:var(--sun-border);color:var(--sun)}
+/* ── Stage Filter ── */
+.stage-filters{display:flex;gap:6px;overflow-x:auto;padding-bottom:10px;margin-bottom:10px;scrollbar-width:none}
+.stage-filters::-webkit-scrollbar{display:none}
+.stage-pill{
+  padding:5px 12px;border-radius:12px;font-size:.65rem;font-weight:600;
+  letter-spacing:.5px;cursor:pointer;border:1px solid var(--border);
+  background:var(--card);color:var(--dim);transition:all .2s;white-space:nowrap;flex-shrink:0;
+}
+.stage-pill.active{background:rgba(255,215,0,.08);border-color:rgba(255,215,0,.25);color:var(--gold)}
+/* ── Search ── */
+.search-box{
+  width:100%;padding:10px 14px 10px 36px;border-radius:12px;border:1px solid var(--border);
+  background:var(--card);color:var(--text);font-size:.85rem;font-family:inherit;
+  margin-bottom:12px;outline:none;transition:border-color .2s;
+}
+.search-box:focus{border-color:rgba(255,215,0,.3)}
+.search-wrap{position:relative;margin-bottom:2px}
+.search-wrap svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);width:16px;height:16px;stroke:var(--dim);fill:none;stroke-width:2}
+/* ── Set Card ── */
+.set-card{
+  background:var(--card);border:1px solid var(--border);border-radius:14px;
+  padding:12px 14px;margin-bottom:8px;transition:all .2s;position:relative;overflow:hidden;
+}
+.set-card:hover{background:var(--card-hover)}
+.set-card.fri{border-left:3px solid rgba(0,212,255,.4)}
+.set-card.sat{border-left:3px solid rgba(168,85,247,.4)}
+.set-card.sun{border-left:3px solid rgba(255,59,139,.4)}
+.set-top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.set-artist{font-size:.9rem;font-weight:700;line-height:1.3}
+.set-meta{display:flex;gap:8px;align-items:center;margin-top:4px;flex-wrap:wrap}
+.set-time{font-size:.72rem;color:var(--desc);font-weight:500}
+.set-stage{
+  font-size:.6rem;font-weight:700;letter-spacing:.8px;padding:2px 8px;
+  border-radius:6px;background:rgba(255,255,255,.05);color:var(--dim);
+}
+.set-notes{font-size:.72rem;color:var(--desc);margin-top:6px;line-height:1.4;display:none}
+.set-card.expanded .set-notes{display:block}
+.set-card .expand-hint{font-size:.6rem;color:var(--dim);margin-top:4px;cursor:pointer}
+/* ── Badges ── */
+.badge{
+  font-size:.55rem;font-weight:800;letter-spacing:1px;padding:2px 7px;
+  border-radius:6px;display:inline-block;margin-left:6px;vertical-align:middle;
+}
+.badge-live{background:rgba(239,68,68,.15);color:var(--red);animation:pulse-live 1.5s ease infinite}
+.badge-next{background:rgba(255,215,0,.12);color:var(--gold)}
+.badge-both{background:rgba(255,215,0,.12);color:var(--gold)}
+.badge-free{background:rgba(34,197,94,.1);color:var(--green)}
+.badge-vip{background:rgba(168,85,247,.1);color:var(--sat)}
+.badge-canceled{background:rgba(239,68,68,.1);color:var(--red);text-decoration:line-through}
+.badge-tbd{background:rgba(255,255,255,.05);color:var(--dim)}
+.badge-conflict{background:rgba(249,115,22,.12);color:var(--orange)}
+.badge-offsite{background:rgba(239,68,68,.12);color:var(--red);font-weight:800}
+.walk-card{
+  padding:10px 12px;margin:4px 0 4px 0;border-radius:10px;
+  background:rgba(255,215,0,.03);border:1px solid rgba(255,215,0,.08);
+  font-size:.7rem;color:var(--desc);line-height:1.5;
+}
+.walk-card strong{color:var(--gold);font-weight:700}
+.walk-card .walk-warn{color:var(--orange);font-weight:600}
+.walk-card .walk-ok{color:var(--green)}
+.section-divider{
+  font-size:.6rem;font-weight:700;letter-spacing:2px;color:var(--dim);
+  padding:14px 0 8px;text-transform:uppercase;text-align:center;
+  border-top:1px solid var(--border);margin-top:8px;
+}
+@keyframes pulse-live{0%,100%{opacity:1}50%{opacity:.5}}
+/* ── Favorite Heart ── */
+.fav-btn{
+  background:none;border:none;cursor:pointer;padding:6px;flex-shrink:0;
+  display:flex;align-items:center;gap:2px;
+}
+.fav-btn svg{width:20px;height:20px;stroke:var(--dim);fill:none;stroke-width:2;transition:all .2s}
+.fav-btn.m-fav svg{stroke:var(--fri);fill:rgba(0,212,255,.3)}
+.fav-btn.s-fav svg{stroke:var(--sun);fill:rgba(255,59,139,.3)}
+.fav-btn.both-fav svg{stroke:var(--gold);fill:rgba(255,215,0,.3)}
+.fav-toggle{display:flex;gap:2px;align-items:center}
+.fav-initial{
+  font-size:.55rem;font-weight:800;width:18px;height:18px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;cursor:pointer;
+  border:1px solid var(--border);transition:all .2s;
+}
+.fav-initial.active-m{background:rgba(0,212,255,.15);border-color:var(--fri);color:var(--fri)}
+.fav-initial.active-s{background:rgba(255,59,139,.15);border-color:var(--sun);color:var(--sun)}
+/* ── My Plan ── */
+.person-toggle{display:flex;gap:6px;margin-bottom:14px;justify-content:center}
+.person-pill{
+  padding:7px 18px;border-radius:16px;font-size:.7rem;font-weight:700;
+  letter-spacing:1px;cursor:pointer;border:1px solid var(--border);
+  background:var(--card);color:var(--dim);transition:all .2s;
+}
+.person-pill.active{background:rgba(255,215,0,.08);border-color:rgba(255,215,0,.25);color:var(--gold)}
+.gap-card{
+  text-align:center;padding:8px;font-size:.7rem;color:var(--dim);
+  font-style:italic;border-left:2px dashed rgba(255,255,255,.06);margin:4px 0 4px 20px;
+}
+.plan-day-header{
+  font-size:.7rem;font-weight:700;letter-spacing:2px;padding:10px 0 6px;
+  margin-top:8px;
+}
+.plan-day-header.fri-h{color:var(--fri)}
+.plan-day-header.sat-h{color:var(--sat)}
+.plan-day-header.sun-h{color:var(--sun)}
+/* ── Notification Toggle ── */
+.notif-row{
+  display:flex;align-items:center;gap:8px;margin-top:6px;padding-top:6px;
+  border-top:1px solid rgba(255,255,255,.04);
+}
+.notif-toggle{
+  width:36px;height:20px;border-radius:10px;background:rgba(255,255,255,.08);
+  border:none;cursor:pointer;position:relative;transition:background .2s;flex-shrink:0;
+}
+.notif-toggle::after{
+  content:'';position:absolute;width:16px;height:16px;border-radius:50%;
+  background:var(--dim);top:2px;left:2px;transition:all .2s;
+}
+.notif-toggle.on{background:rgba(255,215,0,.2)}
+.notif-toggle.on::after{left:18px;background:var(--gold)}
+.notif-time-pills{display:flex;gap:4px}
+.notif-time{
+  font-size:.6rem;padding:3px 8px;border-radius:8px;cursor:pointer;
+  border:1px solid var(--border);background:var(--card);color:var(--dim);transition:all .2s;
+}
+.notif-time.active{background:rgba(255,215,0,.1);border-color:rgba(255,215,0,.2);color:var(--gold)}
+.notif-label{font-size:.6rem;color:var(--dim);font-weight:600;letter-spacing:.5px}
+/* ── Explore ── */
+.cat-pills{display:flex;gap:6px;overflow-x:auto;padding-bottom:10px;margin-bottom:10px;scrollbar-width:none}
+.cat-pills::-webkit-scrollbar{display:none}
+.cat-pill{
+  padding:6px 14px;border-radius:14px;font-size:.65rem;font-weight:600;
+  letter-spacing:.3px;cursor:pointer;border:1px solid var(--border);
+  background:var(--card);color:var(--dim);transition:all .2s;white-space:nowrap;flex-shrink:0;
+}
+.cat-pill.active{background:rgba(255,215,0,.08);border-color:rgba(255,215,0,.25);color:var(--gold)}
+.explore-card{
+  background:var(--card);border:1px solid var(--border);border-radius:14px;
+  padding:14px;margin-bottom:8px;transition:all .2s;
+}
+.explore-card:hover{background:var(--card-hover)}
+.explore-name{font-size:.88rem;font-weight:700}
+.explore-desc{font-size:.72rem;color:var(--desc);margin-top:4px;line-height:1.4}
+.explore-detail{font-size:.65rem;color:var(--dim);margin-top:6px;display:flex;gap:12px;flex-wrap:wrap}
+.explore-detail span{display:flex;align-items:center;gap:3px}
+/* ── Packing ── */
+.packing-progress{
+  background:rgba(255,255,255,.04);border-radius:12px;padding:12px 14px;margin-bottom:14px;
+  border:1px solid var(--border);
+}
+.progress-bar-wrap{height:6px;background:rgba(255,255,255,.06);border-radius:3px;margin-top:8px;overflow:hidden}
+.progress-bar{height:100%;border-radius:3px;background:linear-gradient(to right,var(--fri),var(--gold));transition:width .3s}
+.progress-text{font-size:.75rem;font-weight:600;color:var(--desc)}
+.tsa-alert{
+  background:rgba(249,115,22,.06);border:1px solid rgba(249,115,22,.15);
+  border-radius:10px;padding:10px 12px;margin-bottom:14px;
+  font-size:.7rem;color:var(--orange);font-weight:500;
+}
+.pack-category{
+  font-size:.65rem;font-weight:700;letter-spacing:1.5px;color:var(--dim);
+  padding:10px 0 6px;text-transform:uppercase;
+}
+.pack-item{
+  display:flex;align-items:center;gap:10px;padding:10px 12px;
+  background:var(--card);border:1px solid var(--border);border-radius:10px;
+  margin-bottom:4px;transition:all .2s;
+}
+.pack-item.checked{opacity:.4}
+.pack-item.checked .pack-text{text-decoration:line-through}
+.pack-check{
+  width:20px;height:20px;border-radius:6px;border:2px solid var(--border);
+  background:none;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;transition:all .2s;color:transparent;font-size:.7rem;
+}
+.pack-check.checked{background:rgba(34,197,94,.15);border-color:var(--green);color:var(--green)}
+.pack-text{font-size:.82rem;flex:1}
+.pack-note{font-size:.65rem;color:var(--orange);font-weight:500}
+.pack-del{
+  background:none;border:none;color:var(--dim);cursor:pointer;padding:4px;font-size:1rem;
+  opacity:0;transition:opacity .2s;
+}
+.pack-item:hover .pack-del{opacity:1}
+@media(max-width:600px){.pack-del{opacity:.5}}
+.add-item-row{display:flex;gap:6px;margin-bottom:14px}
+.add-input{
+  flex:1;padding:10px 12px;border-radius:10px;border:1px solid var(--border);
+  background:var(--card);color:var(--text);font-size:.82rem;font-family:inherit;outline:none;
+}
+.add-input:focus{border-color:rgba(255,215,0,.3)}
+.add-btn{
+  padding:10px 16px;border-radius:10px;border:1px solid rgba(255,215,0,.25);
+  background:rgba(255,215,0,.08);color:var(--gold);font-size:.75rem;font-weight:700;
+  cursor:pointer;font-family:inherit;transition:all .2s;white-space:nowrap;
+}
+.add-btn:hover{background:rgba(255,215,0,.15)}
+/* ── Info ── */
+.info-section{
+  background:var(--card);border:1px solid var(--border);border-radius:14px;
+  margin-bottom:10px;overflow:hidden;
+}
+.info-header{
+  padding:14px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;
+  font-size:.85rem;font-weight:700;
+}
+.info-header svg{width:16px;height:16px;stroke:var(--dim);fill:none;stroke-width:2;transition:transform .2s}
+.info-section.open .info-header svg{transform:rotate(180deg)}
+.info-body{padding:0 14px 14px;display:none;font-size:.78rem;color:var(--desc);line-height:1.6}
+.info-section.open .info-body{display:block}
+.info-body strong{color:var(--text);font-weight:600}
+.info-body ul{list-style:none;padding:0}
+.info-body li{padding:3px 0;padding-left:12px;position:relative}
+.info-body li::before{content:'';position:absolute;left:0;top:10px;width:4px;height:4px;border-radius:50%;background:var(--gold)}
+.info-row{display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid rgba(255,255,255,.03)}
+.info-label{color:var(--dim);font-size:.7rem}
+.info-value{font-size:.75rem;font-weight:500}
+.conf-code{
+  font-family:monospace;background:rgba(255,215,0,.06);padding:2px 8px;
+  border-radius:6px;color:var(--gold);font-size:.75rem;font-weight:600;
+}
+/* ── Empty State ── */
+.empty-state{text-align:center;padding:40px 20px;color:var(--dim)}
+.empty-state p{font-size:.85rem;margin-top:8px}
+/* ── Util ── */
+.section-title{
+  font-size:.65rem;font-weight:700;letter-spacing:2px;color:var(--dim);
+  padding:8px 0;text-transform:uppercase;
+}
+.gold-text{color:var(--gold)}
+.mb-8{margin-bottom:8px}
+.mt-12{margin-top:12px}
+@media(min-width:700px){
+  .tab{padding:16px 20px 24px}
+  .set-card{padding:14px 18px}
+  .bottom-nav{max-width:500px;left:50%;transform:translateX(-50%);border-radius:20px 20px 0 0}
+}
+</style>
+</head>
+<body>
+
+<header class="app-header">
+  <h1>COACHELLA HQ</h1>
+  <div class="header-line"></div>
+</header>
+
+<!-- TAB: SCHEDULE -->
+<div class="tab active" id="tab-schedule">
+  <div class="day-pills">
+    <div class="day-pill fri active" onclick="setDay('friday')">FRI</div>
+    <div class="day-pill sat" onclick="setDay('saturday')">SAT</div>
+    <div class="day-pill sun" onclick="setDay('sunday')">SUN</div>
+  </div>
+  <div class="search-wrap">
+    <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+    <input class="search-box" placeholder="Search artists..." oninput="renderSchedule()">
+  </div>
+  <div class="stage-filters" id="stage-filters"></div>
+  <div id="schedule-list"></div>
+</div>
+
+<!-- TAB: MY PLAN -->
+<div class="tab" id="tab-plan">
+  <div style="text-align:center;margin-bottom:12px">
+    <div style="font-size:.65rem;font-weight:700;letter-spacing:2px;color:var(--gold)">YOUR ITINERARY</div>
+    <div style="font-size:.6rem;color:var(--dim);margin-top:2px">Combined picks with walking directions</div>
+  </div>
+  <div id="plan-list"></div>
+</div>
+
+<!-- TAB: EXPLORE -->
+<div class="tab" id="tab-explore">
+  <div class="cat-pills" id="cat-pills"></div>
+  <div id="explore-list"></div>
+</div>
+
+<!-- TAB: PACKING -->
+<div class="tab" id="tab-packing">
+  <div class="person-toggle">
+    <div class="person-pill active" onclick="setPackPerson('mavvie')">MAVVIE</div>
+    <div class="person-pill" onclick="setPackPerson('stefania')">STEFANIA</div>
+  </div>
+  <div class="tsa-alert">Carry-on only! All liquids must be 3.4oz or less in a quart-size bag. Get travel containers before Thursday!</div>
+  <div class="packing-progress" id="pack-progress"></div>
+  <div class="add-item-row">
+    <input class="add-input" id="add-pack-input" placeholder="Add item...">
+    <button class="add-btn" onclick="addPackItem()">+ ADD</button>
+  </div>
+  <div id="packing-list"></div>
+</div>
+
+<!-- TAB: INFO -->
+<div class="tab" id="tab-info">
+  <div id="info-list"></div>
+</div>
+
+<!-- BOTTOM NAV -->
+<nav class="bottom-nav">
+  <button class="nav-btn active" onclick="switchTab('schedule')">
+    <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+    SCHEDULE
+  </button>
+  <button class="nav-btn" onclick="switchTab('plan')">
+    <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+    MY PLAN
+  </button>
+  <button class="nav-btn" onclick="switchTab('explore')">
+    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>
+    EXPLORE
+  </button>
+  <button class="nav-btn" onclick="switchTab('packing')">
+    <svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+    PACKING
+  </button>
+  <button class="nav-btn" onclick="switchTab('info')">
+    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+    INFO
+  </button>
+</nav>
+
+<script>
+// ═══════════════════════════════════════
+// DATA
+// ═══════════════════════════════════════
+const STAGES = ['All','Coachella','Outdoor','Sonora','Gobi','Mojave','Sahara','Yuma','Quasar'];
+const DAYS = ['friday','saturday','sunday'];
+const DAY_DATES = {friday:'2026-04-18',saturday:'2026-04-19',sunday:'2026-04-20'};
+const DAY_LABELS = {friday:'FRIDAY 4/18',saturday:'SATURDAY 4/19',sunday:'SUNDAY 4/20'};
+const DAY_CLASS = {friday:'fri',saturday:'sat',sunday:'sun'};
+
+function t(h,m){return h*60+m}
+
+const SCHEDULE = {
+friday:[
+// Coachella Stage
+{id:'f1',artist:'Record Safari',stage:'Coachella',start:t(16,15),end:t(17,20)},
+{id:'f2',artist:'Teddy Swims',stage:'Coachella',start:t(17,30),end:t(18,20)},
+{id:'f3',artist:'The xx',stage:'Coachella',start:t(19,0),end:t(19,55),notes:'Indie electronic trio reunited. Expect atmospheric, moody set with hits like "Intro" and "Crystalised."'},
+{id:'f4',artist:'Sabrina Carpenter',stage:'Coachella',start:t(21,5),end:t(22,35),notes:'W1: "Sabrinawood" spectacle. 20 songs, Hollywood fantasy stage. Celebrity cameos: Will Ferrell, Susan Sarandon, Sam Elliott, Samuel L. Jackson. Dior couture throughout. Billboard called it "superstar-caliber."'},
+{id:'f5',artist:'Anyma',stage:'Coachella',start:t(24,0),end:t(25,30),notes:'BACK FOR W2! Canceled W1 due to 45mph winds. World premiere of AEDEN show. This is a must-see.'},
+// Outdoor Theatre
+{id:'f6',artist:'Tiffany Tyson',stage:'Outdoor',start:t(14,50),end:t(15,50)},
+{id:'f7',artist:'Dabeull',stage:'Outdoor',start:t(16,0),end:t(16,50)},
+{id:'f8',artist:'Lykke Li',stage:'Outdoor',start:t(17,20),end:t(18,10),notes:'Swedish indie pop. Known for "I Follow Rivers." Atmospheric and emotional live performer.'},
+{id:'f9',artist:'Dijon',stage:'Outdoor',start:t(18,40),end:t(19,30),notes:'Intimate R&B/indie. Raw emotional vocals. W1: brought out by Justin Bieber during Saturday set.'},
+{id:'f10',artist:'Turnstile',stage:'Outdoor',start:t(20,5),end:t(21,0),notes:'W1: Hardcore mosh-pit energy, frontman crowd-surfed through the audience. High energy.'},
+{id:'f11',artist:'Disclosure',stage:'Outdoor',start:t(22,35),end:t(23,50),notes:'UK electronic duo. "Latch," "White Noise." Guaranteed dance party. One of the best electronic acts of the weekend.'},
+// Sonora
+{id:'f12',artist:'Doom Dave',stage:'Sonora',start:t(13,0),end:t(13,40)},
+{id:'f13',artist:'Febuary',stage:'Sonora',start:t(13,40),end:t(14,10)},
+{id:'f14',artist:'Carolina Durante',stage:'Sonora',start:t(14,35),end:t(15,15)},
+{id:'f15',artist:'Wednesday',stage:'Sonora',start:t(15,40),end:t(16,20)},
+{id:'f16',artist:'Freshwater',stage:'Sonora',start:t(16,50),end:t(17,30)},
+{id:'f17',artist:'The Two Lips',stage:'Sonora',start:t(18,0),end:t(18,40)},
+{id:'f18',artist:'Ninajirachi',stage:'Sonora',start:t(19,10),end:t(20,0),notes:'W1: Porter Robinson came out as surprise guest.'},
+{id:'f19',artist:'Cachirula & Loojan',stage:'Sonora',start:t(20,25),end:t(21,5)},
+{id:'f20',artist:'Hot Mulligan',stage:'Sonora',start:t(22,0),end:t(22,45)},
+{id:'f21',artist:'Not For Radio',stage:'Sonora',start:t(23,50),end:t(24,50)},
+// Gobi
+{id:'f22',artist:'Cahuilla Bird Singers',stage:'Gobi',start:t(14,15),end:t(14,45)},
+{id:'f23',artist:'Bob Baker Marionettes',stage:'Gobi',start:t(14,55),end:t(15,35)},
+{id:'f24',artist:'NewDad',stage:'Gobi',start:t(16,0),end:t(16,40)},
+{id:'f25',artist:'Joyce Manor',stage:'Gobi',start:t(17,10),end:t(17,50)},
+{id:'f26',artist:'CMAT',stage:'Gobi',start:t(18,15),end:t(18,55)},
+{id:'f27',artist:'fakemink',stage:'Gobi',start:t(19,20),end:t(20,0)},
+{id:'f28',artist:'Holly Humberstone',stage:'Gobi',start:t(20,25),end:t(21,10)},
+{id:'f29',artist:'Joost',stage:'Gobi',start:t(21,50),end:t(22,35)},
+{id:'f30',artist:'Creepy Nuts',stage:'Gobi',start:t(23,5),end:t(23,55),notes:'Japanese hip-hop duo. High energy, unique style.'},
+// Mojave
+{id:'f31',artist:'Novasoul',stage:'Mojave',start:t(14,0),end:t(14,50)},
+{id:'f32',artist:'Slayyyter',stage:'Mojave',start:t(15,0),end:t(15,45),notes:'Hyperpop queen. Just dropped album "Worst Girl in America." High energy dance pop.'},
+{id:'f33',artist:'BINI',stage:'Mojave',start:t(16,15),end:t(17,0),notes:'W1: First Filipino group ever at Coachella. Sang in English, Filipino, and Taglish.'},
+{id:'f34',artist:'Central Cee',stage:'Mojave',start:t(17,30),end:t(18,15),notes:'UK rap star. Massive following. Expect a packed tent.'},
+{id:'f35',artist:'Devo',stage:'Mojave',start:t(18,45),end:t(19,40)},
+{id:'f36',artist:'Moby',stage:'Mojave',start:t(20,10),end:t(21,0),notes:'Electronic legend. "Porcelain," "Natural Blues." A more intimate, emotional set.'},
+{id:'f37',artist:'Ethel Cain',stage:'Mojave',start:t(22,35),end:t(23,25)},
+{id:'f38',artist:'Blood Orange',stage:'Mojave',start:t(23,55),end:t(24,45),notes:'Dev Hynes project. Soulful, genre-blending. Beautiful live show.'},
+// Sahara
+{id:'f39',artist:'Massio',stage:'Sahara',start:t(14,30),end:t(15,35)},
+{id:'f40',artist:'Youna',stage:'Sahara',start:t(15,45),end:t(16,35)},
+{id:'f41',artist:'HUGEL',stage:'Sahara',start:t(16,50),end:t(17,50)},
+{id:'f42',artist:'Marlon Hoffstadt',stage:'Sahara',start:t(18,15),end:t(19,15)},
+{id:'f43',artist:'KATSEYE',stage:'Sahara',start:t(20,0),end:t(20,45),notes:'Global girl group. W1: surprise guests from HUNTR/X. Fun, high-energy pop performance.'},
+{id:'f44',artist:'Levity',stage:'Sahara',start:t(21,15),end:t(22,20)},
+{id:'f45',artist:'Swae Lee',stage:'Sahara',start:t(22,50),end:t(23,40),notes:'W1: Brought out Jhene Aiko, Nav, Rich the Kid as surprise guests.'},
+{id:'f46',artist:'Sexyy Red',stage:'Sahara',start:t(24,5),end:t(24,55),notes:'Party rap queen. Expect a wild, high-energy late-night set.'},
+// Yuma
+{id:'f47',artist:'Sahar Z',stage:'Yuma',start:t(13,0),end:t(13,45)},
+{id:'f48',artist:'Jessica Brankka',stage:'Yuma',start:t(13,45),end:t(14,45)},
+{id:'f49',artist:'Arodes',stage:'Yuma',start:t(14,45),end:t(15,45)},
+{id:'f50',artist:'Groove Armada',stage:'Yuma',start:t(15,45),end:t(16,45)},
+{id:'f51',artist:'Rossi. x Chloe Caillet',stage:'Yuma',start:t(16,45),end:t(18,0)},
+{id:'f52',artist:'Kettama',stage:'Yuma',start:t(18,0),end:t(19,15)},
+{id:'f53',artist:'Prospa',stage:'Yuma',start:t(19,15),end:t(20,30)},
+{id:'f54',artist:'Max Dean x Luke Dean',stage:'Yuma',start:t(20,30),end:t(21,45)},
+{id:'f55',artist:'Max Styler',stage:'Yuma',start:t(21,45),end:t(23,15)},
+{id:'f56',artist:'Gordo',stage:'Yuma',start:t(23,15),end:t(24,55),notes:'Heavy-hitting techno/house. Late night Yuma vibes. One of the best electronic closers.'},
+// Quasar
+{id:'f57',artist:'Tiga',stage:'Quasar',start:t(17,0),end:t(19,0)},
+{id:'f58',artist:'Deep Dish',stage:'Quasar',start:t(19,0),end:t(21,0)},
+{id:'f59',artist:'PAWSA',stage:'Quasar',start:t(21,0),end:t(23,0)},
+],
+saturday:[
+// Coachella Stage
+{id:'s1',artist:'Jaqck Glam',stage:'Coachella',start:t(16,15),end:t(17,20)},
+{id:'s2',artist:'Addison Rae',stage:'Coachella',start:t(17,30),end:t(18,20),notes:'Yes, that Addison Rae. TikTok star turned pop artist. Could be surprisingly fun.'},
+{id:'s3',artist:'Giveon',stage:'Coachella',start:t(19,0),end:t(19,50),notes:'R&B vocalist. "Heartbreak Anniversary," "Lie Again." Smooth, emotional set.'},
+{id:'s4',artist:'The Strokes',stage:'Coachella',start:t(21,0),end:t(22,10),notes:'NYC rock legends. "Last Nite," "Reptilia," "Someday." Guaranteed incredible set.'},
+{id:'s5',artist:'Justin Bieber',stage:'Coachella',start:t(23,25),end:t(24,55),notes:'W1: Controversial but talked-about. ~25 min laptop segment, then stripped-back performance. Surprise guests: Tems, Dijon, The Kid LAROI, WizKid, Hailey Bieber. $10M fee (highest ever). Drove 21 songs into Spotify Global Top 200 next day.'},
+// Outdoor Theatre
+{id:'s6',artist:'Blondshell',stage:'Outdoor',start:t(14,40),end:t(15,25)},
+{id:'s7',artist:'Los Hermanos Flores',stage:'Outdoor',start:t(15,55),end:t(16,45)},
+{id:'s8',artist:'Alex G',stage:'Outdoor',start:t(17,10),end:t(18,0),notes:'Indie songwriter. Cult following. Intimate, unpredictable live sets.'},
+{id:'s9',artist:'SOMBR',stage:'Outdoor',start:t(19,5),end:t(19,55),notes:'W1: Brought out Billy Corgan (Smashing Pumpkins) as surprise guest!'},
+{id:'s10',artist:'Labrinth',stage:'Outdoor',start:t(20,30),end:t(21,25),notes:'Euphoria composer/artist. Incredible vocalist. Emotional, cinematic performance.'},
+{id:'s11',artist:'David Byrne',stage:'Outdoor',start:t(22,20),end:t(23,20),notes:'MUST BE THERE -- Stefania\'s artist! Talking Heads legend. W1: Theatrical, optimistic set mixing classics with new material. You\'ll be backstage via Artist Compound.'},
+// Sonora
+{id:'s12',artist:'Triste Juventud',stage:'Sonora',start:t(13,0),end:t(14,0)},
+{id:'s13',artist:'Die Spitz',stage:'Sonora',start:t(14,0),end:t(14,40)},
+{id:'s14',artist:'Freak Slug',stage:'Sonora',start:t(15,10),end:t(15,50)},
+{id:'s15',artist:'Ecca Vandal',stage:'Sonora',start:t(16,20),end:t(17,0)},
+{id:'s16',artist:'Ceremony',stage:'Sonora',start:t(17,30),end:t(18,10)},
+{id:'s17',artist:'rusowsky',stage:'Sonora',start:t(18,40),end:t(19,20)},
+{id:'s18',artist:'54 Ultra',stage:'Sonora',start:t(19,50),end:t(20,30)},
+{id:'s19',artist:'Mind Enterprises',stage:'Sonora',start:t(21,45),end:t(22,35)},
+// Gobi
+{id:'s20',artist:'Noga Erez',stage:'Gobi',start:t(14,5),end:t(14,50),notes:'First Israeli singer at Coachella.'},
+{id:'s21',artist:'WHATMORE',stage:'Gobi',start:t(16,5),end:t(16,45)},
+{id:'s22',artist:'Luisa Sonza',stage:'Gobi',start:t(17,10),end:t(17,50)},
+{id:'s23',artist:'Geese',stage:'Gobi',start:t(18,15),end:t(19,0),notes:'W1: Brooklyn indie rockers did a partial Bieber cover.'},
+{id:'s24',artist:'Davido',stage:'Gobi',start:t(19,50),end:t(20,35)},
+{id:'s25',artist:'BIA',stage:'Gobi',start:t(21,0),end:t(21,45)},
+{id:'s26',artist:'Morat',stage:'Gobi',start:t(22,10),end:t(23,0)},
+// Mojave
+{id:'s27',artist:'Fujii Kaze',stage:'Mojave',start:t(16,30),end:t(17,20)},
+{id:'s28',artist:'Royel Otis',stage:'Mojave',start:t(17,50),end:t(18,35)},
+{id:'s29',artist:'Taemin',stage:'Mojave',start:t(19,30),end:t(20,20)},
+{id:'s30',artist:'PinkPantheress',stage:'Mojave',start:t(20,55),end:t(21,45),notes:'W1: Massive crowd, warehouse-party energy. Surprise guests: Thundercat, The Dare, HorsegiirL.'},
+{id:'s31',artist:'Interpol',stage:'Mojave',start:t(22,15),end:t(23,15),notes:'NYC post-punk. "Evil," "Obstacle 1." NOTE: Overlaps with David Byrne -- you\'ll be backstage with Byrne.'},
+// Sahara
+{id:'s32',artist:'Seek-One',stage:'Sahara',start:t(14,0),end:t(14,45)},
+{id:'s33',artist:'TEED',stage:'Sahara',start:t(14,50),end:t(15,50)},
+{id:'s34',artist:'ZULAN',stage:'Sahara',start:t(16,0),end:t(16,50)},
+{id:'s35',artist:'Hamdi',stage:'Sahara',start:t(17,0),end:t(17,55)},
+{id:'s36',artist:'Yusuke Yukimatsu',stage:'Sahara',start:t(18,15),end:t(19,10)},
+{id:'s37',artist:'Nine Inch Noize',stage:'Sahara',start:t(20,0),end:t(20,45),notes:'Trent Reznor x Boys Noize collab (NOT Nine Inch Nails proper). W1: Mad Max vibes, dancers in grey suits. Intense.'},
+{id:'s38',artist:'Adriatique',stage:'Sahara',start:t(22,30),end:t(23,25),notes:'Shifted earlier after REZZ cancellation.'},
+{id:'s39',artist:'Worship',stage:'Sahara',start:t(23,55),end:t(24,55)},
+// Yuma
+{id:'s40',artist:'Yamagucci',stage:'Yuma',start:t(13,0),end:t(14,0)},
+{id:'s41',artist:'GENESI',stage:'Yuma',start:t(14,0),end:t(15,0)},
+{id:'s42',artist:'Riordan',stage:'Yuma',start:t(15,0),end:t(16,15)},
+{id:'s43',artist:'Mahmut Orhan',stage:'Yuma',start:t(16,15),end:t(17,30)},
+{id:'s44',artist:'Ben Sterling',stage:'Yuma',start:t(17,30),end:t(18,45)},
+{id:'s45',artist:'SOSA',stage:'Yuma',start:t(18,45),end:t(20,15)},
+{id:'s46',artist:'Bedouin',stage:'Yuma',start:t(20,15),end:t(21,45),notes:'Melodic house/techno duo. Perfect Yuma vibes. Immersive, hypnotic set.'},
+{id:'s47',artist:'Boys Noize',stage:'Yuma',start:t(21,45),end:t(23,0)},
+{id:'s48',artist:'Armin van Buuren x Adam Beyer',stage:'Yuma',start:t(23,0),end:t(24,55)},
+// Quasar
+{id:'s49',artist:'Joezi',stage:'Quasar',start:t(17,0),end:t(19,0)},
+{id:'s50',artist:'Afrojack x Shimza',stage:'Quasar',start:t(19,0),end:t(21,0)},
+{id:'s51',artist:'David Guetta',stage:'Quasar',start:t(21,0),end:t(23,0),notes:'W1: Jennifer Lopez came out for live debut of "Save Me Tonight"!'},
+],
+sunday:[
+// Coachella Stage
+{id:'u1',artist:'Gabe Real',stage:'Coachella',start:t(14,45),end:t(15,30)},
+{id:'u2',artist:'Tijuana Panthers',stage:'Coachella',start:t(15,40),end:t(16,15)},
+{id:'u3',artist:'Wet Leg',stage:'Coachella',start:t(16,45),end:t(17,30)},
+{id:'u4',artist:'Major Lazer',stage:'Coachella',start:t(18,10),end:t(19,10),notes:'W1: First festival set since 2016. M.I.A. was surprise guest! High energy dance party.'},
+{id:'u5',artist:'Young Thug',stage:'Coachella',start:t(19,50),end:t(20,40),notes:'W1: Brought out Camila Cabello for "Havana."'},
+{id:'u6',artist:'Karol G',stage:'Coachella',start:t(21,55),end:t(23,30),notes:'First Latina headliner in Coachella history! W1: 3-story stone cave structure, 20+ songs, surprise guests Becky G, Wisin. Debuted new song with Cigarettes After Sex. Baptism visual with stone-carved pool.'},
+// Outdoor Theatre
+{id:'u7',artist:'Juicewon',stage:'Outdoor',start:t(15,0),end:t(15,50)},
+{id:'u8',artist:'Gigi Perez',stage:'Outdoor',start:t(16,0),end:t(16,45)},
+{id:'u9',artist:'Clipse',stage:'Outdoor',start:t(17,15),end:t(18,10)},
+{id:'u10',artist:'Foster the People',stage:'Outdoor',start:t(18,45),end:t(19,40),notes:'"Pumped Up Kicks," "Sit Next to Me." Fun, feel-good indie pop set.'},
+{id:'u11',artist:'Laufey',stage:'Outdoor',start:t(20,40),end:t(21,40),notes:'Icelandic jazz-pop sensation. Beautiful vocals, orchestral arrangements. Huge Gen Z following.'},
+{id:'u12',artist:'BIGBANG',stage:'Outdoor',start:t(22,30),end:t(23,30),notes:'K-pop legends reunion. Anniversary show. Historic moment.'},
+// Sonora
+{id:'u13',artist:'Panda & Chok',stage:'Sonora',start:t(13,0),end:t(14,0)},
+{id:'u14',artist:'Glitterer',stage:'Sonora',start:t(14,0),end:t(14,40)},
+{id:'u15',artist:'Model/Actriz',stage:'Sonora',start:t(15,10),end:t(15,50)},
+{id:'u16',artist:'Jane Remover',stage:'Sonora',start:t(16,20),end:t(17,0)},
+{id:'u17',artist:'Los Retros',stage:'Sonora',start:t(17,30),end:t(18,10),notes:'Retro soul/funk from Oxnard, CA. Smooth grooves.'},
+{id:'u18',artist:'ROZ',stage:'Sonora',start:t(18,40),end:t(19,30)},
+{id:'u19',artist:'DRAIN',stage:'Sonora',start:t(20,0),end:t(20,40)},
+{id:'u20',artist:'French Police',stage:'Sonora',start:t(21,10),end:t(22,0)},
+// Gobi
+{id:'u21',artist:'flowerovlove',stage:'Gobi',start:t(14,5),end:t(14,35)},
+{id:'u22',artist:'The Chats',stage:'Gobi',start:t(15,0),end:t(15,40)},
+{id:'u23',artist:'COBRAH',stage:'Gobi',start:t(16,5),end:t(16,50)},
+{id:'u24',artist:'Oklou',stage:'Gobi',start:t(17,15),end:t(18,0),notes:'W1: Underscores came out as surprise guest.'},
+{id:'u25',artist:'Black Flag',stage:'Gobi',start:t(18,30),end:t(19,5)},
+{id:'u26',artist:'TOMORA',stage:'Gobi',start:t(19,45),end:t(20,35)},
+{id:'u27',artist:'The Rapture',stage:'Gobi',start:t(21,5),end:t(21,55)},
+// Mojave
+{id:'u28',artist:'wyldeflower',stage:'Mojave',start:t(14,30),end:t(15,10)},
+{id:'u29',artist:'Samia',stage:'Mojave',start:t(15,15),end:t(15,55)},
+{id:'u30',artist:'Little Simz',stage:'Mojave',start:t(16,25),end:t(17,10)},
+{id:'u31',artist:'Suicidal Tendencies',stage:'Mojave',start:t(17,35),end:t(18,25)},
+{id:'u32',artist:'Iggy Pop',stage:'Mojave',start:t(19,10),end:t(20,10),notes:'W1: 78 years old, performed shirtless. Absolute legend. Electrifying.'},
+{id:'u33',artist:'FKA twigs',stage:'Mojave',start:t(20,45),end:t(22,0),notes:'W1: Ballroom culture tribute with voguing dancers. Artistic, stunning visual performance.'},
+// Sahara
+{id:'u34',artist:'LOBOMAN',stage:'Sahara',start:t(14,30),end:t(15,30)},
+{id:'u35',artist:'Girl Math (VNSSA x NALA)',stage:'Sahara',start:t(15,35),end:t(16,35)},
+{id:'u36',artist:'BUNT.',stage:'Sahara',start:t(16,45),end:t(17,45)},
+{id:'u37',artist:'Duke Dumont',stage:'Sahara',start:t(18,10),end:t(19,10),notes:'"Ocean Drive," "I Got U." Feel-good house music. Perfect sunset set.'},
+{id:'u38',artist:'Mochakk',stage:'Sahara',start:t(19,25),end:t(20,25),notes:'Brazilian house DJ. Infectious grooves. Rising star.'},
+{id:'u39',artist:'Subtronics',stage:'Sahara',start:t(21,5),end:t(22,5),notes:'INSANE laser show. Heavy dubstep/bass. If you love lasers, this is your set.'},
+{id:'u40',artist:'Kaskade',stage:'Sahara',start:t(22,45),end:t(23,55),notes:'House music legend. "Disarm You," "Eyes." Beautiful closing vibes.'},
+// Yuma
+{id:'u41',artist:'LE YORA',stage:'Yuma',start:t(13,0),end:t(14,0)},
+{id:'u42',artist:'AZZECCA',stage:'Yuma',start:t(14,0),end:t(15,0)},
+{id:'u43',artist:'&friends',stage:'Yuma',start:t(15,0),end:t(16,15)},
+{id:'u44',artist:'MESTIZA',stage:'Yuma',start:t(16,15),end:t(17,30)},
+{id:'u45',artist:'Carlita x Josh Baker',stage:'Yuma',start:t(17,30),end:t(19,0)},
+{id:'u46',artist:'Royksopp',stage:'Yuma',start:t(19,0),end:t(20,30)},
+{id:'u47',artist:'WhoMadeWho',stage:'Yuma',start:t(20,30),end:t(22,0)},
+{id:'u48',artist:'Green Velvet x AYYBO',stage:'Yuma',start:t(22,0),end:t(23,55)},
+// Quasar
+{id:'u49',artist:'Jazzy',stage:'Quasar',start:t(16,0),end:t(18,0)},
+{id:'u50',artist:'JOY (Anonymous)',stage:'Quasar',start:t(18,0),end:t(20,0)},
+{id:'u51',artist:'Fatboy Slim',stage:'Quasar',start:t(20,0),end:t(22,0),notes:'"Praise You," "Right Here Right Now." Living legend of dance music.'},
+// W2 Quasar additions (times TBD)
+{id:'u52',artist:'RL Grime',stage:'Quasar',start:0,end:0,tbd:true,notes:'Weekend 2 Quasar addition. Set time TBD -- check Coachella app for updates.'},
+{id:'u53',artist:'Flosstradamus',stage:'Quasar',start:0,end:0,tbd:true,notes:'Weekend 2 Quasar addition. Set time TBD.'},
+{id:'u54',artist:'Knock2',stage:'Quasar',start:0,end:0,tbd:true,notes:'Weekend 2 Quasar addition. Set time TBD.'},
+{id:'u55',artist:'Devault',stage:'Quasar',start:0,end:0,tbd:true,notes:'Weekend 2 Quasar addition. Set time TBD.'},
+{id:'u56',artist:'LP Giobbi',stage:'Quasar',start:0,end:0,tbd:true,notes:'Weekend 2 Quasar addition. Set time TBD.'},
+]
+};
+
+// Pre-loaded favorites
+const DEFAULT_MAVVIE = new Set(['f32','f8','f9','f3','f43','f4','f45','f11','f38','f56','f46','f5','s8','s3','s46','s30','s4','s11','s31','s10','s5','u8','u4','u37','u10','u5','u38','u33','u39','u6','u40']);
+const DEFAULT_STEF = new Set(['f32','f34','f27','f3','f43','f10','f4','f11','f30','f46','f38','f36','f8','s2','s37','s30','s4','s11','s10','s5','u36','u17','u4','u10','u5','u11','u39','u6','u40']);
+
+// ── EXPLORE DATA ──
+const EXPLORE = [
+// Pop-ups
+{id:'e1',cat:'Pop-ups',name:'Barbie "You Can Be Any Barbie"',desc:'First-ever Coachella activation near main entrance. Charm Bar (make custom charms), Portrait Studio with pro lighting and Coachella backdrop, Gallery Wall.',where:'Near main entrance',hours:'All day',free:true,badges:['FREE']},
+{id:'e2',cat:'Pop-ups',name:'Pinterest Analog Playground',desc:'Phone-free zone with custom charms, beauty touch-ups with e.l.f., and a printed Joy Guide with stickers, postcards, and lenticular photos to take home.',where:'On grounds',hours:'All day',free:true,badges:['FREE']},
+{id:'e3',cat:'Pop-ups',name:'Postmates Pit Stop',desc:'Curated food trucks: Ggiata, Irv\'s Burgers, HomeState, Tacos 1986. Mini photo ops, mocktails, and an air-conditioned escape lounge.',where:'On grounds',hours:'All day',free:false,badges:[]},
+{id:'e4',cat:'Pop-ups',name:'Starbucks Coffee House',desc:'Official coffee sponsor. Complimentary cold beverages on festival grounds.',where:'On grounds',hours:'All day',free:true,badges:['FREE']},
+{id:'e5',cat:'Pop-ups',name:'Aperol Day Club',desc:'Orange-hued installation with vibrant lights, live DJ sets, and interactive style touchpoints.',where:'On grounds',hours:'Daytime',free:false,badges:[]},
+{id:'e6',cat:'Pop-ups',name:'Wavytalk Hair Studio',desc:'Official Hair Tools Partner. Free hairstyling including braids and blowouts.',where:'On grounds',hours:'All day',free:true,badges:['FREE']},
+{id:'e7',cat:'Pop-ups',name:'Medicube Skincare',desc:'Official skincare sponsor. Sampling booths with free skincare products.',where:'On grounds + camping',hours:'All day',free:true,badges:['FREE']},
+{id:'e8',cat:'Pop-ups',name:'Buldak Crawl',desc:'Korean spicy ramen brand. Unique spicy food collaborations across the grounds. Find all the Buldak stops!',where:'Multiple locations',hours:'All day',free:false,badges:[]},
+{id:'e9',cat:'Pop-ups',name:'Cash App Poolside',desc:'Interactive experience with photo ops, poolside treats, and a claw machine where you can win prizes.',where:'On grounds',hours:'All day',free:true,badges:['FREE']},
+{id:'e10',cat:'Off-Site',name:'Bloom Nutrition 7-Eleven',desc:'Pink-wrapped 7-Eleven near Palm Springs Airport. DJs, free samples, airbrush merch station, giveaways. Could hit on the way from airport Thursday!',where:'Near PSP airport (on your way in)',hours:'Check socials',free:true,offsite:true,badges:['FREE','OFF-SITE']},
+{id:'e11',cat:'Off-Site',name:'PacSun Roadside',desc:'Highway 111 heading to festival. Exclusive merch, flash tattoos. Could hit on the way to festival.',where:'Highway 111 (on the route)',hours:'Daytime',free:true,offsite:true,badges:['FREE','OFF-SITE']},
+{id:'e12',cat:'Off-Site',name:'Maruchan at Cabazon Outlets',desc:'Free ramen samples, DIY ramen bar, exclusive merch, giveaways. Far from you -- need a separate Uber trip.',where:'Cabazon Outlets (far)',hours:'Daytime',free:true,offsite:true,badges:['FREE','OFF-SITE']},
+// Speakeasies
+{id:'e13',cat:'Speakeasies',name:'The Cabin',desc:'Immersive cozy mountain hideaway vibe. By Houston Hospitality. Hidden bar experience.',where:'Hidden on grounds',hours:'Evening',free:false,badges:[]},
+{id:'e14',cat:'Speakeasies',name:'Mixteca',desc:'Agave-forward cocktail bar from NYC\'s Please Don\'t Tell (PDT). Premium mezcal and tequila drinks.',where:'Hidden on grounds',hours:'Evening',free:false,badges:[]},
+{id:'e15',cat:'Speakeasies',name:'Tiki Bar',desc:'VIP-only hidden bar. Serene escape bordered by Lake Medjhool. Deliberately secret so guests discover it organically.',where:'VIP area, near Lake Medjhool',hours:'Evening',free:false,badges:['VIP']},
+{id:'e16',cat:'Speakeasies',name:'Golden Hour',desc:'Returning hidden bar. Parisian theme with large mirrors and floral/plant wall decorations. Photo-worthy.',where:'Hidden on grounds',hours:'Golden hour+',free:false,badges:[]},
+{id:'e17',cat:'Speakeasies',name:'Block Party',desc:'Another hidden venue on the grounds. Part of the fun is finding it.',where:'Hidden on grounds',hours:'Evening',free:false,badges:[]},
+{id:'e18',cat:'Speakeasies',name:'Love Hour',desc:'Hidden bar within the festival. Ask around or stumble upon it.',where:'Hidden on grounds',hours:'Evening',free:false,badges:[]},
+// Photo Booths
+{id:'e19',cat:'Photo Booths',name:'Barbie Portrait Studio',desc:'Professional lighting with Barbie x Coachella backdrop. Free photos.',where:'Near main entrance',hours:'All day',free:true,badges:['FREE']},
+{id:'e20',cat:'Photo Booths',name:'Pinterest Lenticular Photos',desc:'Unique lenticular (holographic-style) physical photos you take home. Free keepsake.',where:'Pinterest activation',hours:'All day',free:true,badges:['FREE']},
+{id:'e21',cat:'Photo Booths',name:'Cash App Photo Ops',desc:'Poolside photo opportunities with themed backdrops.',where:'Cash App area',hours:'All day',free:true,badges:['FREE']},
+{id:'e22',cat:'Photo Booths',name:'YSL Beauty Drive-Thru',desc:'Off-site in Indio. Vintage Oldsmobile 442 as photo backdrop, mirrored surfaces, saturated lighting. Free makeup application with 4 festival looks.',where:'Off-site, Indio',hours:'Public Fri',free:true,badges:['FREE','OFF-SITE']},
+// Free Stuff
+{id:'e23',cat:'Free Stuff',name:'Art Studios (Camping Hub)',desc:'Completely free make-it-take-it crafts: DIY jewelry, bead bars, blend aromatherapy oils, upcycled fashion, custom patches on Gap hoodies.',where:'Camping Hub',hours:'All day',free:true,badges:['FREE']},
+{id:'e24',cat:'Free Stuff',name:'Red Bull Free Slushies',desc:'Complimentary Red Bull specialty mocktails and the crowd-favorite Red Bull slushie. Available starting 3 PM daily at ground level of Mirage.',where:'Red Bull Mirage, ground level',hours:'3 PM daily',free:true,badges:['FREE']},
+{id:'e25',cat:'Free Stuff',name:'Dove Deodorant Sampling',desc:'Free deodorant samples at multiple stops throughout Indio and on grounds.',where:'Multiple locations',hours:'All day',free:true,badges:['FREE']},
+// Food & Drink
+{id:'e26',cat:'Food & Drink',name:'Sweetfin',desc:'Poke bowls. ~$23.',where:'On grounds',hours:'All day',free:false,price:'$23',badges:[]},
+{id:'e27',cat:'Food & Drink',name:'Prince Street Pizza',desc:'NYC-style slices. Warning: two slices = ~$41.',where:'On grounds',hours:'All day',free:false,price:'~$20/slice',badges:[]},
+{id:'e28',cat:'Food & Drink',name:'Irv\'s Burgers',desc:'Classic burgers at the Postmates Pit Stop.',where:'Postmates area',hours:'All day',free:false,badges:[]},
+{id:'e29',cat:'Food & Drink',name:'Tacos 1986',desc:'LA-favorite tacos at the Postmates Pit Stop.',where:'Postmates area',hours:'All day',free:false,badges:[]},
+{id:'e30',cat:'Food & Drink',name:'El Moro Churros',desc:'Churros. Sweet treat stop.',where:'On grounds',hours:'All day',free:false,badges:[]},
+{id:'e31',cat:'Food & Drink',name:'Nobu Omakase (Red Bull Mirage)',desc:'$375/person curated omakase by Nobu chefs with Quasar stage views. Reserve via Dorsia app. 5-11 PM.',where:'Red Bull Mirage',hours:'5-11 PM',free:false,price:'$375/person',badges:[]},
+{id:'e32',cat:'Food & Drink',name:'Coffee & Drinks Price Guide',desc:'Latte: $17. Matcha: $13. Coke/Sprite: $7. Fries: $28. Chicken sandwich: $30. Fried wings+chips: $25. Greek salad: $15. Wontons: $14.',where:'Various',hours:'All day',free:false,badges:[]},
+// Merch
+{id:'e33',cat:'Merch',name:'Official Coachella Merch',desc:'Totes ~$30. Tees ~$35-45. Hats ~$35-45. Hoodies $65-75. Gap x Coachella hoodie $100. Also available at shop.coachella.com.',where:'Merch tents + VIP store',hours:'All day',free:false,badges:[]},
+{id:'e34',cat:'Merch',name:'Amex Merch Lane',desc:'Skip the line at merch stores with any American Express card. Also: $20 statement credit when you spend $120+ on-site.',where:'Merch tents',hours:'All day',free:false,badges:[]},
+{id:'e35',cat:'Merch',name:'Barbie x Coachella Merch',desc:'Exclusive collab merch. $35-45 range.',where:'Barbie activation',hours:'All day',free:false,price:'$35-45',badges:[]},
+// Off-Site Events
+{id:'e38',cat:'Off-Site',name:'YSL Beauty Drive-Thru',desc:'Immersive beauty installation. 4 free festival makeup looks. Vintage car photo op. In Indio -- need Uber.',where:'Indio (Uber ~15 min)',hours:'Friday',free:true,offsite:true,badges:['FREE','OFF-SITE']},
+// Red Bull Mirage
+{id:'e40',cat:'Red Bull Mirage',name:'Red Bull Mirage',desc:'3-story, 20,000+ sqft hospitality destination across from Quasar stage. Ground level open to ALL. Shaded seating, misting fans, screen viewing. FREE slushies at 3 PM daily. Upper levels: sign up for text alerts at redbull.com/us-en/events/mirage for daily access passes and surprise perks.',where:'Across from Quasar',hours:'All day -- free slushies 3 PM',free:true,badges:['FREE']},
+// Additional items
+{id:'e41',cat:'Free Stuff',name:'Starbucks Unicorn Frappuccino',desc:'The legendary Unicorn Frappe is BACK (Coachella exclusive, not in stores). Free. Rotating menu so only available a few hours each day. Also: free Cold Brew, Iced Matcha, Strawberry Acai Refresher. Dairy-free available.',where:'Starbucks Coffeehouse on grounds',hours:'Rotating -- check early',free:true,badges:['FREE']},
+{id:'e42',cat:'Pop-ups',name:'Lollipop Star Musical Lollipops',desc:'Candy that plays music through your jawbone via bone conduction tech. Put it in your mouth, hear music. No earbuds. Flavor drops from Anyma and Ava Max. Went viral at CES and The Tonight Show.',where:'GA area activation',hours:'All day',free:false,badges:[]},
+{id:'e44',cat:'Free Stuff',name:'Always & Secret Refresh Rooms',desc:'Hydration station, glam room, free samples. A little oasis to refresh during the day.',where:'On grounds',hours:'All day',free:true,badges:['FREE']},
+{id:'e45',cat:'Free Stuff',name:'Ferris Wheel & Art Installations',desc:'The iconic Coachella Ferris wheel and large-scale art installations throughout the grounds. Included with your ticket. Great photo ops, especially at sunset/golden hour.',where:'Throughout grounds',hours:'All day',free:true,badges:['FREE']},
+{id:'e46',cat:'Off-Site',name:'Ryan Meetup (at Coachella Beer Barn)',desc:'A not-for-profit social event for... people literally named Ryan. They throw events across the country. RSVP on Partiful.',where:'Coachella Beer Barn, Indio',hours:'Check Partiful',free:true,offsite:true,badges:['OFF-SITE']},
+// NEW: On-grounds activations
+{id:'e50',cat:'Photo Booths',name:'Google Gemini AI Photobooths',desc:'AI-powered photo filters with instant prints. 4 locations across venue and camping. Fun AI-generated festival photos.',where:'4 locations on grounds',hours:'All day',free:true,badges:['FREE']},
+{id:'e51',cat:'Pop-ups',name:'Sol de Janeiro "Casa Cheirosa"',desc:'30x30ft sensory activation. Coachella\'s first fragrance partner. Scent portals in reimagined Rio phone booths, DJ lounge, sampling bar with mini mists, keychain charms, body cream samples. Juice bar 2-6pm.',where:'Across from Indio Central Market',hours:'1-9 PM daily',free:true,badges:['FREE']},
+{id:'e52',cat:'Pop-ups',name:'e.l.f.scape to Balm Desert',desc:'Pool club oasis with e.l.f. cosmetics, shimmer shades, photo moments, and new Pink Lemonade Melting Lip Balm launch. Free products given away.',where:'Across from Gobi Stage',hours:'1-8:30 PM daily',free:true,badges:['FREE']},
+{id:'e53',cat:'Pop-ups',name:'Heineken "The Clinker"',desc:'Smart band on your drink that syncs Spotify data. Clink with someone else -- if you have similar music taste, it lights up and connects you on social media. Wild tech.',where:'Heineken House (21+)',hours:'All day',free:true,badges:['FREE']},
+{id:'e54',cat:'Pop-ups',name:'Coca-Cola Pop Shop',desc:'Immersive space with storytelling, sound design, and refreshments.',where:'On grounds',hours:'All day',free:true,badges:['FREE']},
+{id:'e55',cat:'Pop-ups',name:'Alaska Airlines Experience',desc:'Sensory travel escape with photo ops from London, Tokyo, Seoul. Cold drinks, snacks, free WiFi, phone charging, and Atmos Rewards sign-ups. YOUR AIRLINE!',where:'On grounds',hours:'All day',free:true,badges:['FREE']},
+{id:'e56',cat:'Free Stuff',name:'Magnum Ice Cream Spray Bar',desc:'VIP exclusive! Customize ice cream bars with edible spray paint. First-ever frozen dessert sponsor.',where:'VIP area only',hours:'All day',free:true,badges:['FREE','VIP']},
+{id:'e57',cat:'Pop-ups',name:'Absolut Heat Haus & Cooler Club',desc:'Spicy Lemonade, Pina Picante Vodkarita cocktails, and "Hottest Brunch." Also sampling ready-to-drink Absolut x Ocean Spray Refreshers.',where:'On grounds (21+)',hours:'All day',free:true,badges:['FREE']},
+{id:'e58',cat:'Speakeasies',name:'Neon Cactus Speakeasy',desc:'Hidden bar near Beer Barn. Password: "CACTUS". This is the one you were looking for!',where:'Near Beer Barn (hidden)',hours:'Evening',free:false,badges:[]},
+{id:'e59',cat:'Speakeasies',name:'Sabrina Carpenter Speakeasy',desc:'Hidden speakeasy at Indio Central Market. Password required (ask around or check socials). This is the Sabrina one you mentioned!',where:'Indio Central Market (hidden)',hours:'Evening',free:false,badges:[]},
+{id:'e60',cat:'Speakeasies',name:'Trident "Tri-Different" Speakeasy',desc:'Speakeasy-style listening bar inside the festival. Gum brand, but surprisingly cool vibe.',where:'On grounds (hidden)',hours:'Evening',free:false,badges:[]},
+{id:'e61',cat:'Free Stuff',name:'BELLA+CANVAS Custom Vintage Merch',desc:'Pick a vintage Coachella design from 25 years of archives and put it on a blank to make custom merch. Free customization.',where:'Near merch area',hours:'All day',free:true,badges:['FREE']},
+{id:'e62',cat:'Free Stuff',name:'Neutrogena Sunscreen Dispensers',desc:'8 free broad-spectrum sunscreen dispensers spread across venue and camping. No excuses for sunburn.',where:'8 locations on grounds',hours:'All day',free:true,badges:['FREE']},
+{id:'e63',cat:'Pop-ups',name:'Coachella "Just Got Miniversed"',desc:'Miniature replica of the entire festival with tiny ferris wheel, photo ops, mocktails, and vinyl records. Adorable.',where:'On grounds',hours:'All day',free:true,badges:['FREE']},
+{id:'e64',cat:'Pop-ups',name:'Record Safari',desc:'Air-conditioned store with 25,000+ vinyl records. Record Store Day exclusives on Saturday 4/18! Storage service $12 includes Coachella tote.',where:'On grounds',hours:'All day',free:true,badges:['FREE']},
+{id:'e65',cat:'Pop-ups',name:'Gap Hoodie House',desc:'Customize Gap x Coachella hoodies with patches, beads, charms (design changes daily). Claw machine for VIP upgrades.',where:'On grounds',hours:'All day',free:false,price:'$10 customization',badges:[]},
+{id:'e66',cat:'Photo Booths',name:'Snapchat Photobooth',desc:'Custom Snap lenses and selfie experience with instant sharing.',where:'On grounds',hours:'All day',free:true,badges:['FREE']},
+{id:'e67',cat:'Pop-ups',name:'Rivian Electric Elsewhere',desc:'Electric vehicle oasis with meditative soundscapes, celestial lights, sustainable listening lounge, and R2 vehicle showcase.',where:'On grounds',hours:'All day',free:true,badges:['FREE']},
+{id:'e68',cat:'Free Stuff',name:'Skechers Lounge',desc:'Immersive lounge showcasing AERO Burst running shoes. Chill spot.',where:'On grounds',hours:'All day',free:true,badges:['FREE']},
+{id:'e69',cat:'Pop-ups',name:'Radiohead: Kid A MNESIA Bunker',desc:'17,000 sqft UNDERGROUND installation. 75-min immersive film + galleries. RESERVE ON AXS at kida-mnesia.com. Fri/Sat: 2pm, 4:15, 6:30, 8:45, 11pm. Sun: 1:15, 3:30, 5:45, 8, 10:15.',where:'Underground, polo fields',hours:'Timed entry -- book now!',free:true,badges:['FREE']},
+{id:'e70',cat:'Pop-ups',name:'Party In My Living Room x GV Black',desc:'House music programming with surprise performers. BIPOC-focused collaboration.',where:'On grounds',hours:'All day',free:true,badges:['FREE']},
+{id:'e71',cat:'Pop-ups',name:'Casual Fridays by Global Inheritance',desc:'Thrifted, sustainable fashion activation. Find unique vintage pieces.',where:'On grounds',hours:'All day',free:true,badges:['FREE']},
+// Off-site events (need Uber, sorted to bottom)
+{id:'e72',cat:'Off-Site',name:'Goldenvoice Surf Club - Saturday',desc:'Pool party with Subtronics, ROZ, Blossom. Lazy river, wave pool. Ticketed on AXS.',where:'Palm Springs Surf Club (Uber from hotel)',hours:'12 PM Sat',free:false,offsite:true,badges:['OFF-SITE']},
+{id:'e73',cat:'Off-Site',name:'Goldenvoice Surf Club - Sunday',desc:'Pool party with Gordo, Joshwa, GENESI. Ticketed on AXS.',where:'Palm Springs Surf Club (Uber from hotel)',hours:'12 PM Sun',free:false,offsite:true,badges:['OFF-SITE']},
+{id:'e74',cat:'Off-Site',name:'Framework In The Desert',desc:'Underground rave in airport hangar. House/techno after-hours. Tickets on Dice FM.',where:'Thermal, CA (30+ min Uber)',hours:'Late night',free:false,offsite:true,badges:['OFF-SITE']},
+];
+
+const EXPLORE_CATS = ['All','Pop-ups','Speakeasies','Photo Booths','Free Stuff','Food & Drink','Merch','Off-Site','Red Bull Mirage'];
+
+// ── PACKING DATA ──
+const DEFAULT_PACKING = {
+mavvie:[
+{id:'pm1',text:'Chroma dongle',cat:'Tech',checked:false},
+{id:'pm2',text:'Portable chargers (x2)',cat:'Tech',checked:false},
+{id:'pm3',text:'Phone',cat:'Tech',checked:false},
+{id:'pm4',text:'Camera',cat:'Tech',checked:false},
+{id:'pm5',text:'Sunscreen (non-aerosol)',cat:'Protection',checked:false},
+{id:'pm6',text:'Sunglasses',cat:'Protection',checked:false},
+{id:'pm7',text:'Regular glasses',cat:'Protection',checked:false},
+{id:'pm8',text:'Face scarf / bandana',cat:'Protection',checked:false},
+{id:'pm9',text:'Hat',cat:'Protection',checked:false},
+{id:'pm10',text:'Nasal filters (Nosk brand)',cat:'Protection',checked:false,note:'Invisible nose inserts that block dust'},
+{id:'pm11',text:'Hand sanitizer',cat:'Toiletries',checked:false},
+{id:'pm12',text:'Nasal spray',cat:'Toiletries',checked:false},
+{id:'pm13',text:'Chapstick',cat:'Toiletries',checked:false},
+{id:'pm14',text:'Wipes (cleaning)',cat:'Toiletries',checked:false},
+{id:'pm15',text:'Lotion + TRAVEL CONTAINERS',cat:'Toiletries',checked:false,note:'Need 3.4oz bottles for carry-on!'},
+{id:'pm16',text:'Razor',cat:'Toiletries',checked:false},
+{id:'pm17',text:'Eyeshadow',cat:'Toiletries',checked:false},
+{id:'pm18',text:'Gems / face jewels',cat:'Toiletries',checked:false},
+{id:'pm19',text:'Bathing suit',cat:'Clothes',checked:false},
+{id:'pm20',text:'Sweater / hoodie',cat:'Clothes',checked:false},
+{id:'pm21',text:'Cover-up',cat:'Clothes',checked:false},
+{id:'pm22',text:'Comfy sneakers (PRIMARY shoes)',cat:'Clothes',checked:false,note:'This is your main shoe. Not booties.'},
+{id:'pm23',text:'Booties (hotel/dinner only)',cat:'Clothes',checked:false},
+{id:'pm24',text:'Outfits x3 (one per day)',cat:'Clothes',checked:false},
+{id:'pm25',text:'ID',cat:'Essentials',checked:false},
+{id:'pm26',text:'Plastic empty water bottle',cat:'Essentials',checked:false},
+{id:'pm27',text:'Portable fan',cat:'Essentials',checked:false},
+{id:'pm28',text:'Extra bag / tote',cat:'Essentials',checked:false},
+{id:'pm29',text:'Flight confirmation (Alaska AS2A, conf MBC)',cat:'Documents',checked:false},
+{id:'pm30',text:'Hotel confirmation (DoubleTree Palm Springs)',cat:'Documents',checked:false},
+],
+stefania:[
+{id:'ps1',text:'ID',cat:'Essentials',checked:false},
+{id:'ps2',text:'Sunscreen',cat:'Essentials',checked:false},
+{id:'ps3',text:'Sunglasses',cat:'Essentials',checked:false},
+{id:'ps4',text:'Hand sanitizer',cat:'Essentials',checked:false},
+{id:'ps5',text:'Water bottle (empty, plastic)',cat:'Essentials',checked:false},
+{id:'ps6',text:'Portable charger',cat:'Tech',checked:false},
+{id:'ps7',text:'Phone',cat:'Tech',checked:false},
+{id:'ps8',text:'Camera',cat:'Tech',checked:false},
+{id:'ps9',text:'Wipes',cat:'Toiletries',checked:false},
+{id:'ps10',text:'Bonnet',cat:'Toiletries',checked:false},
+{id:'ps11',text:'Hair stuff',cat:'Toiletries',checked:false},
+{id:'ps12',text:'Bathing suit',cat:'Clothes',checked:false},
+{id:'ps13',text:'Sweater / hoodie',cat:'Clothes',checked:false},
+{id:'ps14',text:'Comfy shoes',cat:'Clothes',checked:false},
+{id:'ps15',text:'Outfits x3',cat:'Clothes',checked:false},
+]
+};
+
+// ── INFO DATA ──
+const INFO_SECTIONS = [
+{title:'Your Passes',icon:'ticket',body:`<ul>
+<li><strong>VIP:</strong> Dedicated viewing areas near Main Stage and Outdoor Theatre. Air-conditioned restrooms. Shaded lounges with seating, specialty food/drink vendors, full bars. VIP-exclusive merch store in 12 Peaks area.</li>
+<li><strong>Artist Compound:</strong> Private backstage retreat with open bars, shaded lounges, and direct pathways to artist spaces. This is through Stefania's Lady Gaga / David Byrne team. Ask Stef to confirm if golf cart access is included.</li>
+<li><strong>Golf Carts:</strong> NOT included with standard VIP. Only Safari/Resort packages ($10K+) get private carts. Artist Compound may have different access -- confirm with Stef's team.</li>
+<li><strong>Three Wristbands:</strong> Pick up at will call. Do NOT tamper with or remove wristbands once on -- voids access immediately.</li>
+</ul>`},
+{title:'Travel',icon:'plane',body:`<div class="info-row"><span class="info-label">Outbound</span><span class="info-value">Apr 17 -- Alaska AS2A, JFK 11:30 AM -> PSP 2:43 PM</span></div>
+<div class="info-row"><span class="info-label">Return</span><span class="info-value">Apr 20 -- AS5533 PSP->SEA + AS222 SEA->JFK, arrive Apr 21 6:04 PM</span></div>
+<div class="info-row"><span class="info-label">Alaska Conf</span><span class="conf-code">MBC</span></div>
+<div class="info-row"><span class="info-label">Capital One Conf</span><span class="conf-code">H-LRU-HWE</span></div>
+<div class="info-row"><span class="info-label">JFK Terminal</span><span class="info-value">Terminal 8 (Alaska)</span></div>
+<div style="margin-top:10px"><strong>Capital One Lounge:</strong> Terminal 4 (need AirTrain from T8, ~15 min). Guest fee: $45/person since Feb 2026 policy change. Up to you if worth the terminal hop.</div>
+<div style="margin-top:8px"><strong>TWA Hotel:</strong> Terminal 5, open to public. Paris Cafe breakfast 7-11 AM, Fly-By Bagels 5 AM-12 PM. AirTrain from T8. Doable if you get to JFK by ~8:30 AM (gives you ~1.5 hrs before boarding).</div>`},
+{title:'Hotel',icon:'hotel',body:`<ul>
+<li><strong>DoubleTree by Hilton Golf Resort</strong>, Palm Springs (Cathedral City)</li>
+<li>~26 miles / 30-40 min to festival (no traffic)</li>
+<li>NOT on official Coachella shuttle route</li>
+<li>Shower and reset between days -- big advantage over camping</li>
+<li>Hotel pool for recovery time</li>
+</ul>`},
+{title:'Getting There & Back (All Uber)',icon:'car',body:`<div style="color:var(--orange);font-weight:600;margin-bottom:8px">No car -- everything is Uber/Lyft from DoubleTree Palm Springs (~30 min ride)</div>
+<ul>
+<li><strong>Best arrival:</strong> Before 1 PM or after 7 PM</li>
+<li><strong>Best departure:</strong> Before 10 PM or after 2 AM</li>
+<li><strong>WORST departure:</strong> Midnight - 2:30 AM (mass exodus, insane surge)</li>
+<li><strong>Uber normal hours:</strong> $50-100 each way from Palm Springs</li>
+<li><strong>Uber surge (midnight-2:30 AM):</strong> $200-350+ one way. Seriously.</li>
+<li><strong>Rideshare pickup:</strong> Lot 1D at Ave 49 & Monroe (1.5 mile walk from festival gates!)</li>
+<li><strong>VIP/Private car zone:</strong> Ave 52 & Madison St -- FASTER exit, shorter walk. Ask your Uber to pick up here.</li>
+<li><strong>Request ride 20-30 min before you want to leave.</strong> Cell service dies at midnight.</li>
+<li><strong>Pre-schedule rides</strong> when possible to lock in lower rates</li>
+<li><strong>Strategy:</strong> Either leave before 10 PM and enjoy the hotel pool, OR commit to staying past 2 AM when surge drops. The midnight-2:30 AM window will cost you $300+ and 1+ hour wait.</li>
+<li><strong>Share rides:</strong> Since you're both going to/from the same place, always ride together to split the cost.</li>
+</ul>`},
+{title:'Will Call Pickup',icon:'ticket',body:`<ul>
+<li><strong>Location:</strong> 78200 Miles Ave, Indian Wells, CA 92210 (Gate 4 off Miles Ave)</li>
+<li><strong>Bring:</strong> Valid photo ID (must match purchaser), order confirmation, credit card used to purchase</li>
+<li><strong>Only original purchaser can pick up</strong> -- no name changes</li>
+<li><strong>Best time:</strong> Go early, before 1 PM. Lines grow throughout the day.</li>
+</ul>`},
+{title:'Weather (April 17-20)',icon:'sun',body:`<div class="info-row"><span class="info-label">Thu 4/17 (travel day)</span><span class="info-value">84/59F -- Hazy sun</span></div>
+<div class="info-row"><span class="info-label">Fri 4/18</span><span class="info-value">88/66F -- Mostly sunny</span></div>
+<div class="info-row"><span class="info-label">Sat 4/19</span><span class="info-value">89/63F -- Partly sunny</span></div>
+<div class="info-row"><span class="info-label">Sun 4/20</span><span class="info-value">80/62F -- Not as warm</span></div>
+<div style="margin-top:8px;color:var(--orange);font-weight:600">25-degree swing day to night. Bring a real layer for after sunset!</div>`},
+{title:'Tips & Tricks',icon:'star',body:`<ul>
+<li><strong>Register your wristband</strong> in the Coachella app before arriving (6-digit RFID code)</li>
+<li><strong>Pick a physical meetup spot</strong> with Stefania ahead of time -- cell service dies in crowds</li>
+<li><strong>Save offline maps</strong> of the area on your phone</li>
+<li><strong>Festival is CASHLESS</strong> -- make sure Apple Pay / contactless works before you go</li>
+<li><strong>Screenshot your Uber drop-off spot</strong> and parking lot location</li>
+<li><strong>Red Bull Mirage:</strong> Sign up for text updates EARLY for upper-level access passes</li>
+<li><strong>Free slushies at Red Bull Mirage</strong> start at 3 PM daily</li>
+<li><strong>Art Studios in Camping Hub:</strong> Free DIY jewelry, charms, patches</li>
+<li><strong>Amex perks:</strong> If anyone has Amex -- lounge access (1-8 PM), skip merch line, $20 credit on $120+ spend</li>
+<li><strong>Wander between sets.</strong> Best discoveries happen in smaller tents (Mojave, Gobi)</li>
+<li><strong>Take breaks.</strong> You need them to survive 3 days. Pace yourselves.</li>
+</ul>`},
+{title:'Free Stuff Itinerary (Daily Plan)',icon:'gift',body:`<div style="color:var(--gold);font-weight:700;margin-bottom:8px">Hit these in this order each day for maximum free stuff:</div>
+<ul>
+<li><strong>11 AM - Gates open:</strong> Head to Starbucks Coffeehouse first for free Unicorn Frappe (rotating menu, limited hours). Also free Cold Brew, Matcha, Refreshers.</li>
+<li><strong>11:30 AM - Barbie activation:</strong> Near main entrance. Make free custom charms at Charm Bar + free portrait photos at Portrait Studio. Go early before the line gets crazy.</li>
+<li><strong>12 PM - Pinterest Playground:</strong> Free custom charms, beauty touch-ups with e.l.f., lenticular photos you take home. Phone-free zone so enjoy the vibes.</li>
+<li><strong>12:30 PM - Wavytalk Hair Studio:</strong> Free braids and blowouts. Get festival-ready before the afternoon sets.</li>
+<li><strong>1 PM - Radiohead Bunker (if you booked a slot):</strong> 2-hour experience. RESERVE ON AXS NOW. Fri/Sat slots: 2pm, 4:15, 6:30, 8:45, 11pm. Sun: 1:15, 3:30, 5:45, 8, 10:15.</li>
+<li><strong>2 PM - Medicube + Dove:</strong> Free skincare samples at Medicube booths. Free Dove deodorant at sampling stops around the grounds.</li>
+<li><strong>2:45 PM - Red Bull Mirage:</strong> Get there by 2:45 to be first in line for the FREE Red Bull slushies that start at 3 PM. Ground level is open to everyone. Sign up for their texts for upper-level access.</li>
+<li><strong>3-4 PM - Cash App:</strong> Photo ops, poolside treats, and try the claw machine for free prizes.</li>
+<li><strong>Golden hour - Art installations:</strong> Best photos at the Ferris wheel and large-scale art pieces happen at sunset. Free with your ticket.</li>
+<li><strong>Evening - Speakeasy hunt:</strong> Find The Cabin, Mixteca, Golden Hour, Block Party, Love Hour. Part of the fun is discovering them. Ask staff/other attendees for hints.</li>
+<li><strong>VIP Tiki Bar:</strong> Your VIP wristband gets you into the hidden Tiki Bar near Lake Medjhool. Check it out.</li>
+<li><strong>Always & Secret Refresh Rooms:</strong> Free hydration and glam room whenever you need a break.</li>
+</ul>
+<div style="margin-top:10px;font-weight:600">OFF-SITE FREE STUFF (no ticket needed):</div>
+<ul>
+<li><strong>Bloom Nutrition 7-Eleven:</strong> Near PSP airport. Pink-wrapped store, DJs, free samples, giveaways. Hit on your way from the airport Thursday.</li>
+<li><strong>PacSun:</strong> Highway 111 toward festival. Free flash tattoos, exclusive merch.</li>
+<li><strong>Maruchan at Cabazon Outlets:</strong> Free ramen samples, DIY ramen bar, merch, giveaways.</li>
+<li><strong>YSL Beauty Drive-Thru:</strong> Indio. Free makeup application (4 festival looks). Open to public Friday.</li>
+</ul>`},
+{title:"Do's & Don'ts",icon:'alert',body:`<ul>
+<li><strong>DO:</strong> Sunscreen (reapply every 2 hrs), layers for night, comfortable shoes, portable charger, bandana</li>
+<li><strong>DO:</strong> Set up contactless pay before arriving</li>
+<li><strong>DO:</strong> Bring earplugs (protect your hearing, especially Sahara tent)</li>
+<li><strong>DO:</strong> Hydrate aggressively -- free water refill stations on grounds</li>
+<li><strong>DON'T:</strong> Wear heels on festival grounds (15K-30K steps/day on dirt/grass)</li>
+<li><strong>DON'T:</strong> Bring anything valuable you'd be upset to lose (theft is real in crowds)</li>
+<li><strong>DON'T:</strong> Bring glass, umbrellas, pro cameras, selfie sticks, chairs, flags</li>
+<li><strong>DON'T:</strong> Remove or tamper with your wristband</li>
+<li><strong>Bag max:</strong> 18" x 13" x 8.5" (they use a sizing box at entry)</li>
+<li><strong>Water bottle:</strong> Plastic only, 64oz max, must be empty at entry</li>
+<li><strong>Sneaking food:</strong> People do it (sandwiches in bags). Alcohol is riskier -- they check bags, waistbands, boots. Sunscreen-bottle flasks are a gamble.</li>
+</ul>`},
+];
+
+// ═══════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════
+let currentTab = 'schedule';
+let currentDay = 'friday';
+let currentStage = 'All';
+let planPerson = 'mavvie';
+let packPerson = 'mavvie';
+let exploreCat = 'All';
+
+function loadSet(key, def) {
+  const stored = localStorage.getItem(key);
+  if (stored) return new Set(JSON.parse(stored));
+  return new Set(def);
+}
+function saveSet(key, s) { localStorage.setItem(key, JSON.stringify([...s])); }
+function loadArr(key, def) {
+  const stored = localStorage.getItem(key);
+  if (stored) return JSON.parse(stored);
+  return JSON.parse(JSON.stringify(def));
+}
+function saveArr(key, a) { localStorage.setItem(key, JSON.stringify(a)); }
+
+// Version check -- reset favorites to defaults if version changed (fixes accidental unfavorites)
+const APP_VERSION = 2;
+if (localStorage.getItem('chq_version') !== String(APP_VERSION)) {
+  localStorage.removeItem('chq_mfavs');
+  localStorage.removeItem('chq_sfavs');
+  localStorage.setItem('chq_version', String(APP_VERSION));
+}
+
+let mavvieFavs = loadSet('chq_mfavs', DEFAULT_MAVVIE);
+let stefFavs = loadSet('chq_sfavs', DEFAULT_STEF);
+let exploreFavs = loadSet('chq_efavs', []);
+
+// Walking times between stages (minutes)
+const WALK_TIMES = {};
+const walkData = [
+  ['Coachella','Outdoor',5],['Coachella','Sahara',12],['Coachella','Mojave',8],
+  ['Coachella','Gobi',8],['Coachella','Sonora',10],['Coachella','Yuma',15],['Coachella','Quasar',15],
+  ['Outdoor','Sahara',10],['Outdoor','Mojave',5],['Outdoor','Gobi',5],
+  ['Outdoor','Sonora',8],['Outdoor','Yuma',12],['Outdoor','Quasar',12],
+  ['Sahara','Mojave',8],['Sahara','Gobi',8],['Sahara','Sonora',12],
+  ['Sahara','Yuma',5],['Sahara','Quasar',5],
+  ['Mojave','Gobi',3],['Mojave','Sonora',6],['Mojave','Yuma',8],['Mojave','Quasar',10],
+  ['Gobi','Sonora',5],['Gobi','Yuma',8],['Gobi','Quasar',10],
+  ['Sonora','Yuma',10],['Sonora','Quasar',12],['Yuma','Quasar',5],
+];
+walkData.forEach(([a,b,m]) => { WALK_TIMES[a+'-'+b] = m; WALK_TIMES[b+'-'+a] = m; });
+function getWalk(s1, s2) { return s1 === s2 ? 0 : (WALK_TIMES[s1+'-'+s2] || 10); }
+let packingMavvie = loadArr('chq_pack_m', DEFAULT_PACKING.mavvie);
+let packingStefania = loadArr('chq_pack_s', DEFAULT_PACKING.stefania);
+let notifications = loadArr('chq_notifs', {});
+
+function saveFavs() {
+  saveSet('chq_mfavs', mavvieFavs);
+  saveSet('chq_sfavs', stefFavs);
+}
+function saveExploreFavs() { saveSet('chq_efavs', exploreFavs); }
+function savePacking() {
+  saveArr('chq_pack_m', packingMavvie);
+  saveArr('chq_pack_s', packingStefania);
+}
+
+// ═══════════════════════════════════════
+// UTILITIES
+// ═══════════════════════════════════════
+function fmtTime(mins) {
+  if (mins === 0) return 'TBD';
+  let h = Math.floor(mins / 60);
+  let m = mins % 60;
+  let suffix = 'AM';
+  let display = h;
+  if (h >= 24) { display = h - 24; suffix = 'AM'; }
+  else if (h >= 12) { suffix = 'PM'; if (h > 12) display = h - 12; }
+  if (display === 0) display = 12;
+  return display + ':' + String(m).padStart(2, '0') + ' ' + suffix;
+}
+
+function fmtRange(s, e) {
+  if (s === 0 && e === 0) return 'Time TBD';
+  return fmtTime(s) + ' - ' + fmtTime(e);
+}
+
+function getNowPT() {
+  const now = new Date();
+  const pt = new Date(now.toLocaleString('en-US', { timeZone: 'America/Los_Angeles' }));
+  return pt;
+}
+
+function getNowMins() {
+  const pt = getNowPT();
+  return pt.getHours() * 60 + pt.getMinutes();
+}
+
+function getTodayDay() {
+  const pt = getNowPT();
+  const m = pt.getMonth() + 1;
+  const d = pt.getDate();
+  if (m === 4 && d === 18) return 'friday';
+  if (m === 4 && d === 19) return 'saturday';
+  if (m === 4 && d === 20) return 'sunday';
+  return null;
+}
+
+function isLive(set) {
+  const today = getTodayDay();
+  if (!today || !SCHEDULE[today]) return false;
+  if (!SCHEDULE[today].includes(set)) return false;
+  const now = getNowMins();
+  return now >= set.start && now <= set.end && !set.tbd;
+}
+
+function isUpNext(set) {
+  const today = getTodayDay();
+  if (!today || !SCHEDULE[today]) return false;
+  if (!SCHEDULE[today].includes(set)) return false;
+  const now = getNowMins();
+  return set.start > now && set.start - now <= 30 && !set.tbd;
+}
+
+// Heart SVG
+const HEART = `<svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>`;
+const CHEVRON = `<svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>`;
+
+// ═══════════════════════════════════════
+// RENDER: SCHEDULE
+// ═══════════════════════════════════════
+function renderStageFilters() {
+  const el = document.getElementById('stage-filters');
+  el.innerHTML = STAGES.map(s =>
+    `<div class="stage-pill${s===currentStage?' active':''}" onclick="setStage('${s}')">${s}</div>`
+  ).join('');
+}
+
+function renderSchedule() {
+  const list = document.getElementById('schedule-list');
+  const search = document.querySelector('.search-box').value.toLowerCase().trim();
+  let sets = SCHEDULE[currentDay] || [];
+
+  if (currentStage !== 'All') sets = sets.filter(s => s.stage === currentStage);
+  if (search) sets = sets.filter(s => s.artist.toLowerCase().includes(search));
+
+  // Hide past sets if viewing today's schedule
+  const today = getTodayDay();
+  if (today === currentDay) {
+    const now = getNowMins();
+    sets = sets.filter(s => s.tbd || s.end > now);
+  }
+
+  // Split into favorited and not
+  const isFav = s => mavvieFavs.has(s.id) || stefFavs.has(s.id);
+  const favSets = sets.filter(isFav);
+  const otherSets = sets.filter(s => !isFav(s));
+
+  // Sort each group by start time, TBD at end
+  const sortFn = (a, b) => {
+    if (a.tbd && !b.tbd) return 1;
+    if (!a.tbd && b.tbd) return -1;
+    return a.start - b.start;
+  };
+  favSets.sort(sortFn);
+  otherSets.sort(sortFn);
+  sets = favSets.concat(otherSets);
+
+  const dc = DAY_CLASS[currentDay];
+
+  let html = '';
+  let addedDivider = false;
+  const favCount = favSets.length;
+
+  sets.forEach((s, idx) => {
+    // Add divider between favorited and other sets
+    if (!addedDivider && idx === favCount && favCount > 0 && otherSets.length > 0) {
+      html += '<div class="section-divider">OTHER SETS</div>';
+      addedDivider = true;
+    }
+
+    const mFav = mavvieFavs.has(s.id);
+    const sFav = stefFavs.has(s.id);
+    const bothFav = mFav && sFav;
+    const live = isLive(s);
+    const next = isUpNext(s);
+
+    let badges = '';
+    if (live) badges += '<span class="badge badge-live">LIVE NOW</span>';
+    if (next) badges += '<span class="badge badge-next">UP NEXT</span>';
+    if (bothFav) badges += '<span class="badge badge-both">BOTH</span>';
+    if (s.tbd) badges += '<span class="badge badge-tbd">TIME TBD</span>';
+
+    html += `<div class="set-card ${dc}${s.notes?' expandable':''}" onclick="toggleExpand(this)" data-id="${s.id}">
+      <div class="set-top">
+        <div style="flex:1">
+          <div class="set-artist">${s.artist}${badges}</div>
+          <div class="set-meta">
+            <span class="set-time">${fmtRange(s.start,s.end)}</span>
+            <span class="set-stage">${s.stage.toUpperCase()}</span>
+          </div>
+        </div>
+        <div class="fav-toggle">
+          <div class="fav-initial${mFav?' active-m':''}" onclick="event.stopPropagation();toggleFav('${s.id}','m')" title="Mavvie">M</div>
+          <div class="fav-initial${sFav?' active-s':''}" onclick="event.stopPropagation();toggleFav('${s.id}','s')" title="Stefania">S</div>
+        </div>
+      </div>
+      ${s.notes?`<div class="set-notes">${s.notes}</div><div class="expand-hint">tap for W1 details</div>`:''}
+    </div>`;
+  });
+
+  list.innerHTML = html || '<div class="empty-state"><p>No sets found</p></div>';
+}
+
+function toggleExpand(el) {
+  if (!el.classList.contains('expandable')) return;
+  el.classList.toggle('expanded');
+  const hint = el.querySelector('.expand-hint');
+  if (hint) hint.textContent = el.classList.contains('expanded') ? 'tap to close' : 'tap for W1 details';
+}
+
+function toggleFav(id, who) {
+  const set = who === 'm' ? mavvieFavs : stefFavs;
+  if (set.has(id)) set.delete(id); else set.add(id);
+  saveFavs();
+  renderSchedule();
+  if (currentTab === 'plan') renderPlan();
+}
+
+function setDay(day) {
+  currentDay = day;
+  document.querySelectorAll('.day-pill').forEach(p => {
+    p.classList.toggle('active', p.classList.contains(DAY_CLASS[day]));
+  });
+  renderSchedule();
+}
+
+function setStage(stage) {
+  currentStage = stage;
+  renderStageFilters();
+  renderSchedule();
+}
+
+// ═══════════════════════════════════════
+// RENDER: MY PLAN
+// ═══════════════════════════════════════
+function renderPlan() {
+  const list = document.getElementById('plan-list');
+  let html = '';
+
+  DAYS.forEach(day => {
+    const dc = DAY_CLASS[day];
+    // Combined: union of both favorites
+    let sets = SCHEDULE[day].filter(s => mavvieFavs.has(s.id) || stefFavs.has(s.id));
+
+    sets.sort((a, b) => {
+      if (a.tbd && !b.tbd) return 1;
+      if (!a.tbd && b.tbd) return -1;
+      return a.start - b.start;
+    });
+
+    // Hide past sets if viewing today
+    const today = getTodayDay();
+    if (today === day) {
+      const now = getNowMins();
+      sets = sets.filter(s => s.tbd || s.end > now);
+    }
+
+    if (sets.length === 0) return;
+
+    html += `<div class="plan-day-header ${dc}-h">${DAY_LABELS[day]}</div>`;
+
+    for (let i = 0; i < sets.length; i++) {
+      const s = sets[i];
+      const mFav = mavvieFavs.has(s.id);
+      const sFav = stefFavs.has(s.id);
+      const bothFav = mFav && sFav;
+      const live = isLive(s);
+      const next = isUpNext(s);
+
+      let badges = '';
+      if (live) badges += '<span class="badge badge-live">LIVE NOW</span>';
+      if (next) badges += '<span class="badge badge-next">UP NEXT</span>';
+      if (bothFav) badges += '<span class="badge badge-both">BOTH</span>';
+      else if (mFav && !sFav) badges += '<span class="badge" style="background:rgba(0,212,255,.1);color:var(--fri)">M</span>';
+      else if (!mFav && sFav) badges += '<span class="badge" style="background:rgba(255,59,139,.1);color:var(--sun)">S</span>';
+
+      html += `<div class="set-card ${dc}" data-id="${s.id}">
+        <div class="set-top">
+          <div style="flex:1">
+            <div class="set-artist">${s.artist}${badges}</div>
+            <div class="set-meta">
+              <span class="set-time">${fmtRange(s.start,s.end)}</span>
+              <span class="set-stage">${s.stage.toUpperCase()}</span>
+            </div>
+          </div>
+          <div class="fav-toggle">
+            <div class="fav-initial${mFav?' active-m':''}" onclick="toggleFav('${s.id}','m')" title="Mavvie">M</div>
+            <div class="fav-initial${sFav?' active-s':''}" onclick="toggleFav('${s.id}','s')" title="Stefania">S</div>
+          </div>
+        </div>
+      </div>`;
+
+      // Walking directions & transition to next set
+      if (i < sets.length - 1 && !s.tbd && !sets[i+1].tbd) {
+        const nextSet = sets[i+1];
+        const walkMins = getWalk(s.stage, nextSet.stage);
+        const gap = nextSet.start - s.end;
+        const sameStage = s.stage === nextSet.stage;
+
+        if (gap < 0) {
+          // OVERLAP
+          const overlap = Math.abs(gap);
+          if (sameStage) {
+            html += `<div class="walk-card"><span class="walk-warn">${overlap}min overlap -- same stage (${s.stage}), so stay put. You'll catch the tail end of ${s.artist} and the start of ${nextSet.artist}.</span></div>`;
+          } else {
+            const leaveAt = nextSet.start - walkMins;
+            html += `<div class="walk-card"><span class="walk-warn">${overlap}min overlap!</span> ${s.stage} to ${nextSet.stage} = <strong>${walkMins}min walk</strong>.<br>` +
+              `Leave ${s.artist} at <strong>${fmtTime(leaveAt)}</strong> to catch ${nextSet.artist}'s start. You'll miss the last ${overlap + walkMins}min of ${s.artist}.</div>`;
+          }
+        } else if (sameStage) {
+          html += `<div class="walk-card"><span class="walk-ok">Same stage!</span> ${gap}min break at ${s.stage}. Hold your spot or grab a drink nearby.</div>`;
+        } else if (gap < walkMins + 5) {
+          // Tight transition
+          const leaveAt = s.end;
+          html += `<div class="walk-card"><span class="walk-warn">Tight!</span> Only ${gap}min gap. ${s.stage} to ${nextSet.stage} = <strong>${walkMins}min walk</strong>.<br>` +
+            `Leave ${s.artist} right when it ends at <strong>${fmtTime(leaveAt)}</strong> and walk fast.</div>`;
+        } else {
+          // Comfortable transition
+          const leaveAt = nextSet.start - walkMins - 5;
+          const freeTime = gap - walkMins;
+          let suggestion = '';
+          if (freeTime >= 30) suggestion = ' Grab food, hit a pop-up, or find a speakeasy.';
+          else if (freeTime >= 15) suggestion = ' Quick break -- water refill or check a brand activation.';
+          html += `<div class="walk-card">${gap}min gap. ${s.stage} to ${nextSet.stage} = <strong>${walkMins}min walk</strong>. ${freeTime}min free time.${suggestion}<br>` +
+            `Leave by <strong>${fmtTime(leaveAt)}</strong> to arrive with 5min buffer.</div>`;
+        }
+      }
+    }
+  });
+
+  list.innerHTML = html || '<div class="empty-state"><p>No favorites yet! Go to Schedule and tap M or S to star artists.</p></div>';
+}
+
+function toggleNotif(id) {
+  if (!notifications[id]) notifications[id] = { on: false, mins: 15 };
+  notifications[id].on = !notifications[id].on;
+  saveArr('chq_notifs', notifications);
+  renderPlan();
+  if (notifications[id].on) scheduleNotif(id);
+}
+
+function setNotifTime(id, mins) {
+  if (!notifications[id]) notifications[id] = { on: true, mins };
+  notifications[id].mins = mins;
+  saveArr('chq_notifs', notifications);
+  renderPlan();
+  if (notifications[id].on) scheduleNotif(id);
+}
+
+// ── ntfy.sh notifications ──
+const NTFY_TOPIC = 'mavvie-coachella-2026';
+const activeTimers = {};
+
+function scheduleNotif(id) {
+  if (activeTimers[id]) clearTimeout(activeTimers[id]);
+  const notif = notifications[id];
+  if (!notif?.on) return;
+
+  // Find the set
+  let set = null;
+  for (const day of DAYS) {
+    set = SCHEDULE[day].find(s => s.id === id);
+    if (set) break;
+  }
+  if (!set || set.tbd) return;
+
+  const today = getTodayDay();
+  if (!today) return;
+  if (!SCHEDULE[today].includes(set)) return;
+
+  const nowMins = getNowMins();
+  const alertAt = set.start - notif.mins;
+  const diff = alertAt - nowMins;
+
+  if (diff > 0) {
+    activeTimers[id] = setTimeout(() => {
+      sendNtfy(set.artist, set.stage, notif.mins);
+    }, diff * 60 * 1000);
+  }
+}
+
+function sendNtfy(artist, stage, mins) {
+  const msg = `${artist} starts in ${mins} min at ${stage}!`;
+  fetch(`https://ntfy.sh/${NTFY_TOPIC}`, {
+    method: 'POST',
+    headers: { 'Title': 'CoachellaHQ', 'Priority': '4', 'Tags': 'musical_note' },
+    body: msg
+  }).catch(() => {});
+  // Also browser notification as backup
+  if ('Notification' in window && Notification.permission === 'granted') {
+    new Notification('CoachellaHQ', { body: msg });
+  }
+}
+
+function initNotifs() {
+  if ('Notification' in window && Notification.permission === 'default') {
+    Notification.requestPermission();
+  }
+  Object.keys(notifications).forEach(id => {
+    if (notifications[id]?.on) scheduleNotif(id);
+  });
+}
+
+// ═══════════════════════════════════════
+// RENDER: EXPLORE
+// ═══════════════════════════════════════
+function renderExploreCats() {
+  const el = document.getElementById('cat-pills');
+  el.innerHTML = EXPLORE_CATS.map(c =>
+    `<div class="cat-pill${c===exploreCat?' active':''}" onclick="setExploreCat('${c}')">${c}</div>`
+  ).join('');
+}
+
+function renderExplore() {
+  const list = document.getElementById('explore-list');
+  let items = EXPLORE;
+  if (exploreCat !== 'All') items = items.filter(e => e.cat === exploreCat);
+
+  // Sort: on-grounds first, off-site at bottom
+  items.sort((a, b) => {
+    if (a.offsite && !b.offsite) return 1;
+    if (!a.offsite && b.offsite) return -1;
+    return 0;
+  });
+
+  let html = '';
+  let addedOffsiteDivider = false;
+
+  items.forEach(e => {
+    if (e.offsite && !addedOffsiteDivider && exploreCat === 'All') {
+      html += '<div class="section-divider" style="color:var(--red)">OFF-SITE (NEED UBER)</div>';
+      addedOffsiteDivider = true;
+    }
+
+    const fav = exploreFavs.has(e.id);
+    const badgeHtml = (e.badges||[]).map(b => {
+      if (b === 'FREE') return '<span class="badge badge-free">FREE</span>';
+      if (b === 'VIP') return '<span class="badge badge-vip">VIP</span>';
+      if (b === 'OFF-SITE') return '<span class="badge badge-offsite">OFF-SITE</span>';
+      return `<span class="badge badge-tbd">${b}</span>`;
+    }).join('');
+
+    html += `<div class="explore-card">
+      <div class="set-top">
+        <div style="flex:1">
+          <div class="explore-name">${e.name} ${badgeHtml}</div>
+          <div class="explore-desc">${e.desc}</div>
+          <div class="explore-detail">
+            ${e.where?`<span>Location: ${e.where}</span>`:''}
+            ${e.hours?`<span>Hours: ${e.hours}</span>`:''}
+            ${e.price?`<span>Price: ${e.price}</span>`:''}
+          </div>
+        </div>
+        <button class="fav-btn${fav?' both-fav':''}" onclick="toggleExploreFav('${e.id}')">
+          ${HEART}
+        </button>
+      </div>
+    </div>`;
+  });
+
+  list.innerHTML = html;
+}
+
+function setExploreCat(cat) {
+  exploreCat = cat;
+  renderExploreCats();
+  renderExplore();
+}
+
+function toggleExploreFav(id) {
+  if (exploreFavs.has(id)) exploreFavs.delete(id); else exploreFavs.add(id);
+  saveExploreFavs();
+  renderExplore();
+}
+
+// ═══════════════════════════════════════
+// RENDER: PACKING
+// ═══════════════════════════════════════
+function renderPacking() {
+  const list = document.getElementById('packing-list');
+  const items = packPerson === 'mavvie' ? packingMavvie : packingStefania;
+
+  // Group by category
+  const cats = {};
+  items.forEach(item => {
+    if (!cats[item.cat]) cats[item.cat] = [];
+    cats[item.cat].push(item);
+  });
+
+  // Sort: unchecked first within each cat
+  Object.values(cats).forEach(arr => arr.sort((a,b) => a.checked - b.checked));
+
+  let html = '';
+  const total = items.length;
+  const checked = items.filter(i => i.checked).length;
+
+  // Progress
+  document.getElementById('pack-progress').innerHTML = `
+    <div class="progress-text">${checked} / ${total} packed</div>
+    <div class="progress-bar-wrap"><div class="progress-bar" style="width:${total?Math.round(checked/total*100):0}%"></div></div>
+  `;
+
+  for (const [cat, arr] of Object.entries(cats)) {
+    html += `<div class="pack-category">${cat}</div>`;
+    arr.forEach(item => {
+      html += `<div class="pack-item${item.checked?' checked':''}">
+        <button class="pack-check${item.checked?' checked':''}" onclick="togglePackCheck('${item.id}')">${item.checked?'✓':''}</button>
+        <span class="pack-text">${item.text}</span>
+        ${item.note?`<span class="pack-note">${item.note}</span>`:''}
+        <button class="pack-del" onclick="deletePackItem('${item.id}')">×</button>
+      </div>`;
+    });
+  }
+
+  list.innerHTML = html || '<div class="empty-state"><p>No items yet. Add something above!</p></div>';
+}
+
+function togglePackCheck(id) {
+  const items = packPerson === 'mavvie' ? packingMavvie : packingStefania;
+  const item = items.find(i => i.id === id);
+  if (item) item.checked = !item.checked;
+  savePacking();
+  renderPacking();
+}
+
+function deletePackItem(id) {
+  if (packPerson === 'mavvie') {
+    packingMavvie = packingMavvie.filter(i => i.id !== id);
+  } else {
+    packingStefania = packingStefania.filter(i => i.id !== id);
+  }
+  savePacking();
+  renderPacking();
+}
+
+function addPackItem() {
+  const input = document.getElementById('add-pack-input');
+  const text = input.value.trim();
+  if (!text) return;
+  const id = 'p_' + Date.now();
+  const item = { id, text, cat: 'Added', checked: false };
+  if (packPerson === 'mavvie') packingMavvie.push(item);
+  else packingStefania.push(item);
+  input.value = '';
+  savePacking();
+  renderPacking();
+}
+
+function setPackPerson(p) {
+  packPerson = p;
+  document.querySelectorAll('#tab-packing .person-pill').forEach(el => {
+    el.classList.toggle('active', el.textContent.toLowerCase() === p);
+  });
+  renderPacking();
+}
+
+// Enter key for add input
+document.getElementById('add-pack-input')?.addEventListener('keydown', e => {
+  if (e.key === 'Enter') addPackItem();
+});
+
+// ═══════════════════════════════════════
+// RENDER: INFO
+// ═══════════════════════════════════════
+function renderInfo() {
+  const list = document.getElementById('info-list');
+  list.innerHTML = INFO_SECTIONS.map((s, i) =>
+    `<div class="info-section${i===0?' open':''}" onclick="toggleInfo(this)">
+      <div class="info-header"><span>${s.title}</span>${CHEVRON}</div>
+      <div class="info-body">${s.body}</div>
+    </div>`
+  ).join('');
+}
+
+function toggleInfo(el) {
+  el.classList.toggle('open');
+}
+
+// ═══════════════════════════════════════
+// TAB SWITCHING
+// ═══════════════════════════════════════
+function switchTab(tab) {
+  currentTab = tab;
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-' + tab).classList.add('active');
+  document.querySelectorAll('.nav-btn').forEach((b, i) => {
+    b.classList.toggle('active', ['schedule','plan','explore','packing','info'][i] === tab);
+  });
+  // Re-render active tab
+  if (tab === 'schedule') renderSchedule();
+  else if (tab === 'plan') renderPlan();
+  else if (tab === 'explore') { renderExploreCats(); renderExplore(); }
+  else if (tab === 'packing') renderPacking();
+  else if (tab === 'info') renderInfo();
+}
+
+// ═══════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════
+function init() {
+  // Auto-select today if during festival
+  const today = getTodayDay();
+  if (today) setDay(today);
+
+  renderStageFilters();
+  renderSchedule();
+  renderPlan();
+  renderExploreCats();
+  renderExplore();
+  renderPacking();
+  renderInfo();
+  initNotifs();
+
+  // Update live badges every minute
+  setInterval(() => {
+    if (currentTab === 'schedule') renderSchedule();
+    if (currentTab === 'plan') renderPlan();
+  }, 60000);
+}
+
+init();
+</script>
+</body>
+</html>
