@@ -747,14 +747,46 @@ const EXPLORE = [
 {id:'e23',cat:'Free Stuff',name:'Art Studios (Camping Hub)',desc:'Completely free make-it-take-it crafts: DIY jewelry, bead bars, blend aromatherapy oils, upcycled fashion, custom patches on Gap hoodies.',where:'Camping Hub',hours:'All day',free:true,badges:['FREE']},
 {id:'e24',cat:'Free Stuff',name:'Red Bull Free Slushies',desc:'Complimentary Red Bull specialty mocktails and the crowd-favorite Red Bull slushie. Available starting 3 PM daily at ground level of Mirage.',where:'Red Bull Mirage, ground level',hours:'3 PM daily',free:true,badges:['FREE']},
 {id:'e25',cat:'Free Stuff',name:'Dove Deodorant Sampling',desc:'Free deodorant samples at multiple stops throughout Indio and on grounds.',where:'Multiple locations',hours:'All day',free:true,badges:['FREE']},
-// Food & Drink
-{id:'e26',cat:'Food & Drink',name:'Sweetfin',desc:'Poke bowls. ~$23.',where:'On grounds',hours:'All day',free:false,price:'$23',badges:[]},
-{id:'e27',cat:'Food & Drink',name:'Prince Street Pizza',desc:'NYC-style slices. Warning: two slices = ~$41.',where:'On grounds',hours:'All day',free:false,price:'~$20/slice',badges:[]},
-{id:'e28',cat:'Food & Drink',name:'Irv\'s Burgers',desc:'Classic burgers at the Postmates Pit Stop.',where:'Postmates area',hours:'All day',free:false,badges:[]},
-{id:'e29',cat:'Food & Drink',name:'Tacos 1986',desc:'LA-favorite tacos at the Postmates Pit Stop.',where:'Postmates area',hours:'All day',free:false,badges:[]},
-{id:'e30',cat:'Food & Drink',name:'El Moro Churros',desc:'Churros. Sweet treat stop.',where:'On grounds',hours:'All day',free:false,badges:[]},
-{id:'e31',cat:'Food & Drink',name:'Nobu Omakase (Red Bull Mirage)',desc:'$375/person curated omakase by Nobu chefs with Quasar stage views. Reserve via Dorsia app. 5-11 PM.',where:'Red Bull Mirage',hours:'5-11 PM',free:false,price:'$375/person',badges:[]},
-{id:'e32',cat:'Food & Drink',name:'Coffee & Drinks Price Guide',desc:'Latte: $17. Matcha: $13. Coke/Sprite: $7. Fries: $28. Chicken sandwich: $30. Fried wings+chips: $25. Greek salad: $15. Wontons: $14.',where:'Various',hours:'All day',free:false,badges:[]},
+// Food: Best Value (cheapest/tastiest)
+{id:'e26',cat:'Food & Drink',name:'Starbucks (FREE)',desc:'Free Unicorn Frappe, Cold Brew, Iced Matcha, Strawberry Acai. Rotating menu, limited hours. Get there early.',where:'Indio Central Market',hours:'Opens with gates, limited supply',free:true,price:'FREE',badges:['FREE']},
+{id:'e200',cat:'Food & Drink',name:'Red Bull Slushie (FREE)',desc:'Free specialty mocktails and slushies starting at 3 PM daily. Get there by 2:45.',where:'Red Bull Mirage ground level',hours:'3 PM daily',free:true,price:'FREE',badges:['FREE']},
+{id:'e201',cat:'Food & Drink',name:'Water Refill Stations (FREE)',desc:'Free filtered water at multiple stations across the venue. Bring your empty bottle.',where:'Throughout grounds',hours:'All day',free:true,price:'FREE',badges:['FREE']},
+// Food: Budget Picks ($10-20)
+{id:'e202',cat:'Food & Drink',name:'Delmy\'s Pupusas',desc:'Salvadoran pupusas. One of the cheapest real meals. Also in 12 Peaks VIP.',where:'Mojave Zone + 12 Peaks VIP',hours:'All day',free:false,price:'~$12-15',badges:[]},
+{id:'e203',cat:'Food & Drink',name:'Churrer\u00eda El Moro',desc:'Iconic Mexico City churros with dipping sauces. Great snack, vegan-friendly.',where:'Terrace North',hours:'All day',free:false,price:'~$12-15',badges:[]},
+{id:'e204',cat:'Food & Drink',name:'Spicy Pie',desc:'Giant pizza slices. Classic festival food. Also in camping.',where:'Multiple locations',hours:'All day',free:false,price:'~$12-14/slice',badges:[]},
+{id:'e205',cat:'Food & Drink',name:'Happy Ice',desc:'Housemade Italian ice with real fruit. Refreshing in the desert heat.',where:'Indio Central Market',hours:'All day',free:false,price:'~$10-13',badges:[]},
+{id:'e206',cat:'Food & Drink',name:'Bang Bang Noodles',desc:'Hand-pulled Chinese noodles. Great value for VIP.',where:'12 Peaks VIP',hours:'All day',free:false,price:'~$18-23',badges:['VIP']},
+{id:'e207',cat:'Food & Drink',name:'Kogi Korean BBQ Tacos',desc:'Roy Choi\'s legendary truck. Korean BBQ tacos that started the food truck revolution.',where:'Indio Central Market + Street Food Alley',hours:'All day',free:false,price:'~$15-20',badges:[]},
+// Food: Must-Try (W1 favorites)
+{id:'e208',cat:'Food & Drink',name:'Dave\'s Hot Chicken',desc:'Nashville hot chicken. Sandwich + fries ~$30. Tenders + fries ~$26. Plain fries $12. W1 crowd favorite.',where:'Indio Central Market + Camping',hours:'All day',free:false,price:'$12-30',badges:[]},
+{id:'e209',cat:'Food & Drink',name:'Villas Tacos',desc:'Mesquite-grilled, cheese-crusted tacos. Authentic and delicious.',where:'Indio Central Market',hours:'All day',free:false,price:'~$20-25 for 3',badges:[]},
+{id:'e210',cat:'Food & Drink',name:'Prince Street Pizza',desc:'NYC Sicilian square slices. Famous but expensive. 2 slices + Coke = $41. 4-slice pizza = $34.',where:'3 locations (Central Market, Beer Barn, VIP)',hours:'All day',free:false,price:'$17-20/slice',badges:[]},
+{id:'e211',cat:'Food & Drink',name:'Sweetfin Poke',desc:'Spicy tuna and yuzu salmon poke bowls. Fresh and light.',where:'Indio Central Market + 12 Peaks VIP',hours:'All day',free:false,price:'~$23',badges:[]},
+{id:'e212',cat:'Food & Drink',name:'Maneatingplant',desc:'Plant-based ramen, bao, dumplings. The Fried Shroom Bao is a standout even for meat-eaters.',where:'Indio Central Market',hours:'All day',free:false,price:'~$18-22',badges:[]},
+{id:'e213',cat:'Food & Drink',name:'Rokstar Chicken',desc:'Korean fried chicken with signature sauces. Try the Buldak World\'s Spiciest Tenders if you dare.',where:'Terrace',hours:'All day',free:false,price:'~$20-25',badges:[]},
+{id:'e214',cat:'Food & Drink',name:'Irv\'s Burgers',desc:'Fresh-pressed smashburgers. Classic and good.',where:'Terrace + Postmates',hours:'All day',free:false,price:'~$20-25',badges:[]},
+{id:'e215',cat:'Food & Drink',name:'Tacos 1986',desc:'Handmade corn tortilla carne asada. LA institution.',where:'Coachella Courtyard + 12 Peaks VIP',hours:'All day',free:false,price:'~$20-25',badges:[]},
+{id:'e216',cat:'Food & Drink',name:'The Boiling Crab',desc:'Louisiana Cajun seafood boils. Messy, fun, delicious.',where:'Terrace',hours:'All day',free:false,price:'~$25-35',badges:[]},
+{id:'e217',cat:'Food & Drink',name:'Fat Sal\'s',desc:'LA late-night sandwich legend. Massive sandwiches.',where:'Street Food Alley',hours:'All day',free:false,price:'~$20-25',badges:[]},
+// Food: VIP Exclusive
+{id:'e218',cat:'Food & Drink',name:'KazuNori Hand Roll Bar',desc:'Premium hand roll sushi. Rose Garden VIP exclusive.',where:'Rose Garden VIP',hours:'All day',free:false,price:'~$25-35',badges:['VIP']},
+{id:'e219',cat:'Food & Drink',name:'Le Burger by Camphor',desc:'Modern arts district bistro burgers. VIP exclusive.',where:'12 Peaks VIP',hours:'All day',free:false,price:'~$25-30',badges:['VIP']},
+{id:'e220',cat:'Food & Drink',name:'Truffle Boys',desc:'Artisan truffle fries with bechamel. Loaded fries ~$28.',where:'12 Peaks VIP',hours:'All day',free:false,price:'~$28',badges:['VIP']},
+{id:'e221',cat:'Food & Drink',name:'Magnum Ice Cream Spray Bar',desc:'Customize a Magnum bar with edible spray paint. VIP exclusive activation.',where:'12 Peaks VIP',hours:'All day',free:true,price:'FREE (VIP)',badges:['FREE','VIP']},
+{id:'e31',cat:'Food & Drink',name:'Nobu Omakase',desc:'$375/person curated omakase by Nobu chefs overlooking Quasar. Reserve via Dorsia app.',where:'Red Bull Mirage',hours:'5-11 PM',free:false,price:'$375/person',badges:[]},
+{id:'e222',cat:'Food & Drink',name:'Outstanding in the Field',desc:'4-course wine-paired dinner by acclaimed chefs. $350/person. Rose Garden VIP.',where:'Rose Garden VIP',hours:'6 PM nightly',free:false,price:'$350/person',badges:['VIP']},
+// Drinks
+{id:'e223',cat:'Food & Drink',name:'Drinks Price Guide',desc:'Water $2 / Coke $7 / NA beer $10 / Matcha $13 / Beer $15 / White Claw $16 / Coffee $17 / Lemonade $17 / Cocktails $23-24 / Vodka Red Bull $24. Budget ~$50-75/day for food+drink.',where:'Various bars throughout',hours:'All day (21+ for alcohol)',free:false,badges:[]},
+{id:'e224',cat:'Food & Drink',name:'Mixteca Cocktail Bar',desc:'Agave-forward mezcal/tequila bar by NYC\'s PDT. 5 types of margaritas. Hidden bar vibes.',where:'Coachella Courtyard (21+)',hours:'Evening',free:false,price:'~$23-24',badges:[]},
+{id:'e225',cat:'Food & Drink',name:'Absolut Heat Haus',desc:'Spicy Lemonade and Pina Picante Vodkarita. Free tastings at the activation.',where:'Street Food Alley (21+)',hours:'All day',free:true,price:'FREE tastings',badges:['FREE']},
+{id:'e226',cat:'Food & Drink',name:'Dark Horse Wine + Fros\u00e9',desc:'Wine bar with frozen fros\u00e9 slushies. Perfect for hot afternoons.',where:'Terrace South',hours:'All day',free:false,price:'~$17-20',badges:[]},
+// Desserts
+{id:'e227',cat:'Food & Drink',name:'McConnell\'s Fine Ice Cream',desc:'Santa Barbara ice cream since 1949. Premium flavors.',where:'Indio Central Market',hours:'All day',free:false,price:'~$10-14',badges:[]},
+{id:'e228',cat:'Food & Drink',name:'Afters Ice Cream',desc:'Ice cream sandwiches with creative flavors.',where:'Sonora Zone',hours:'All day',free:false,price:'~$10-14',badges:[]},
+{id:'e229',cat:'Food & Drink',name:'Kuramoto Shavery',desc:'Japanese shaved ice. Light, refreshing, perfect for 90-degree heat.',where:'Terrace South',hours:'All day',free:false,price:'~$10-12',badges:[]},
+// Buldak Crawl
+{id:'e230',cat:'Food & Drink',name:'Buldak Crawl (5-Stop Challenge)',desc:'Hit all 5 Buldak collabs: Prince St Pizza (Buldak pizza), Rokstar Chicken (spiciest tenders), Birrieria San Marcos (Buldak Bomb quesabirria), Sumo Dog (Hotzilla Dog), Sidekicks (Spicy Banana Funnel Cake). Post on social with #buldakcrawlsweepstakes to enter contest.',where:'5 locations across grounds',hours:'All day',free:false,badges:[]},
 // Merch
 {id:'e33',cat:'Merch',name:'Official Coachella Merch',desc:'Totes ~$30. Tees ~$35-45. Hats ~$35-45. Hoodies $65-75. Gap x Coachella hoodie $100. Also available at shop.coachella.com.',where:'Merch tents + VIP store',hours:'All day',free:false,badges:[]},
 {id:'e34',cat:'Merch',name:'Amex Merch Lane',desc:'Skip the line at merch stores with any American Express card. Also: $20 statement credit when you spend $120+ on-site.',where:'Merch tents',hours:'All day',free:false,badges:[]},
@@ -874,7 +906,7 @@ const INFO_SECTIONS = [
     <line x1="195" y1="88" x2="235" y2="88" stroke="rgba(168,85,247,.25)" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#ah)"/>
     <text x="205" y="82" fill="#A855F7" font-size="10" font-weight="700" font-family="sans-serif">3m</text>
     <line x1="275" y1="82" x2="325" y2="48" stroke="rgba(255,59,139,.25)" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#ah)"/>
-    <text x="290" y="58" fill="#FF3B8B" font-size="10" font-weight="700" font-family="sans-serif">8m</text>
+    <text x="278" y="72" fill="#FF3B8B" font-size="10" font-weight="700" font-family="sans-serif">8m</text>
     <line x1="340" y1="58" x2="318" y2="142" stroke="rgba(0,212,255,.25)" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#ah)"/>
     <text x="335" y="102" fill="#00D4FF" font-size="10" font-weight="700" font-family="sans-serif">5m</text>
     <line x1="312" y1="170" x2="332" y2="218" stroke="rgba(0,212,255,.25)" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#ah)"/>
@@ -988,6 +1020,76 @@ const INFO_SECTIONS = [
 <li><strong>Maruchan at Cabazon Outlets:</strong> Free ramen samples, DIY ramen bar, merch, giveaways.</li>
 <li><strong>YSL Beauty Drive-Thru:</strong> Indio. Free makeup application (4 festival looks). Open to public Friday.</li>
 </ul>`},
+{title:'Food Price Guide (Cheapest to Most Expensive)',icon:'food',body:`<div style="color:var(--green);font-weight:700;margin-bottom:6px">FREE</div>
+<ul>
+<li>Water refill stations -- throughout grounds</li>
+<li>Starbucks Unicorn Frappe, Cold Brew, Matcha, Refreshers -- limited hours</li>
+<li>Red Bull slushies + mocktails -- 3 PM daily at Mirage</li>
+<li>Absolut vodka tastings -- Street Food Alley</li>
+<li>Magnum Spray Bar ice cream -- VIP only</li>
+</ul>
+<div style="color:var(--gold);font-weight:700;margin:10px 0 6px">BUDGET ($2-15)</div>
+<ul>
+<li>Bottled water: $2</li>
+<li>Coke/Sprite: $7</li>
+<li>Non-alcoholic beer: $10</li>
+<li>Happy Ice (Italian ice): ~$10-13</li>
+<li>Kuramoto Shavery (shaved ice): ~$10-12</li>
+<li>McConnell\'s / Afters ice cream: ~$10-14</li>
+<li>Plain fries (Dave\'s): $12</li>
+<li>Delmy\'s Pupusas: ~$12-15</li>
+<li>El Moro Churros: ~$12-15</li>
+<li>Spicy Pie (giant slice): ~$12-14</li>
+<li>Matcha: $13</li>
+<li>Spicy wontons: $14</li>
+<li>Greek salad: $15</li>
+<li>Beer: ~$15</li>
+</ul>
+<div style="color:var(--gold);font-weight:700;margin:10px 0 6px">MID-RANGE ($15-25)</div>
+<ul>
+<li>White Claw: $16</li>
+<li>Coffee/latte: $17</li>
+<li>Lemonade: $17</li>
+<li>Whiskey/rum drink: $17</li>
+<li>Bang Bang Noodles: ~$18-23</li>
+<li>Kogi Korean BBQ tacos: ~$15-20</li>
+<li>Maneatingplant (vegan bao): ~$18-22</li>
+<li>Dark Horse fros\u00e9: ~$17-20</li>
+<li>3 tacos (Villas, Tacos 1986): ~$20-25</li>
+<li>Gerard\'s Paella: ~$21</li>
+<li>Poke bowl (Sweetfin): ~$23</li>
+<li>Burrito: ~$23</li>
+<li>Island Noodles: ~$23</li>
+<li>Cocktails: ~$23-24</li>
+<li>Vodka Red Bull: ~$24</li>
+</ul>
+<div style="color:var(--orange);font-weight:700;margin:10px 0 6px">EXPENSIVE ($25+)</div>
+<ul>
+<li>Fried chicken + chips: ~$25</li>
+<li>Fat Sal\'s sandwich: ~$20-25</li>
+<li>Dave\'s chicken sandwich + fries: $30</li>
+<li>KazuNori hand rolls (VIP): ~$25-35</li>
+<li>Boiling Crab seafood: ~$25-35</li>
+<li>Truffle Boys loaded fries (VIP): ~$28</li>
+<li>Le Burger by Camphor (VIP): ~$25-30</li>
+<li>Carne asada fries: $28</li>
+<li>4-slice pizza (Prince St): $34</li>
+<li>2 slices pizza + Coke: $41</li>
+</ul>
+<div style="color:var(--red);font-weight:700;margin:10px 0 6px">PREMIUM ($$$$)</div>
+<ul>
+<li>Outstanding in the Field dinner (VIP): $350/person</li>
+<li>Nobu Omakase (Red Bull Mirage): $375/person</li>
+</ul>
+<div style="margin-top:10px;font-weight:600;color:var(--desc)">Pro tip: Budget $50-75/day for food + drinks. Eat before you arrive to save money. Hit the free Starbucks early. The Buldak Crawl items are worth trying.</div>`},
+{title:'RSVP Links & Bookings',icon:'link',body:`<ul>
+<li><strong>Radiohead Kid A MNESIA Bunker:</strong> Reserve your free timed slot at <a href="https://fanaccount.axs.com/coachella/login" style="color:var(--fri)">fanaccount.axs.com/coachella/login</a>. Fri/Sat: 2pm, 4:15, 6:30, 8:45, 11pm. Sun: 1:15, 3:30, 5:45, 8, 10:15pm.</li>
+<li><strong>Red Bull Mirage upper levels:</strong> Sign up for text alerts at <a href="https://www.redbull.com/us-en/events/mirage" style="color:var(--fri)">redbull.com/us-en/events/mirage</a> for daily access passes + surprise perks.</li>
+<li><strong>Nobu Omakase:</strong> Reserve via the <a href="https://www.dorsia.com" style="color:var(--fri)">Dorsia app</a>. $375/person, 5-11 PM daily inside Red Bull Mirage.</li>
+<li><strong>Goldenvoice Surf Club (off-site):</strong> Pool party with DJs. Ticketed on <a href="https://www.axs.com" style="color:var(--fri)">AXS</a>. Sat + Sun 12 PM at Palm Springs Surf Club.</li>
+<li><strong>Coachella App:</strong> Download and register your wristband (6-digit RFID code). Build your schedule, explore the map.</li>
+</ul>
+<div style="margin-top:8px;font-weight:600;color:var(--orange)">Do these NOW before Weekend 2 slots fill up!</div>`},
 {title:"Do's & Don'ts",icon:'alert',body:`<ul>
 <li><strong>DO:</strong> Sunscreen (reapply every 2 hrs), layers for night, comfortable shoes, portable charger, bandana</li>
 <li><strong>DO:</strong> Set up contactless pay before arriving</li>
