@@ -918,7 +918,7 @@ mavvie:[
 {id:'pm26',text:'Plastic empty water bottle',cat:'Essentials',checked:false},
 {id:'pm27',text:'Portable fan',cat:'Essentials',checked:false},
 {id:'pm28',text:'Extra bag / tote',cat:'Essentials',checked:false},
-{id:'pm29',text:'Flight confirmation (Alaska AS2A, conf MBZMCK)',cat:'Documents',checked:false},
+{id:'pm29',text:'Flight confirmation (Alaska 208, conf MBZMCK)',cat:'Documents',checked:false},
 {id:'pm30',text:'Hotel confirmation (DoubleTree Palm Springs)',cat:'Documents',checked:false},
 ],
 stefania:[
@@ -1013,10 +1013,18 @@ const INFO_SECTIONS = [
 <li><strong>Golf Carts:</strong> NOT included with standard VIP. Only Safari/Resort packages ($10K+) get private carts. Artist Compound may have different access -- confirm with Stef's team.</li>
 <li><strong>Three Wristbands:</strong> Pick up at will call. Do NOT tamper with or remove wristbands once on -- voids access immediately.</li>
 </ul>`},
-{title:'Travel',icon:'plane',body:`<div class="info-row"><span class="info-label">Outbound</span><span class="info-value">Apr 17 -- Alaska AS2A, JFK 11:30 AM -> PSP 2:43 PM</span></div>
-<div class="info-row"><span class="info-label">Return</span><span class="info-value">Apr 20 -- AS5533 PSP->SEA + AS222 SEA->JFK, arrive Apr 21 6:04 PM</span></div>
-<div class="info-row"><span class="info-label">Alaska Conf</span><span class="conf-code">MBZMCK</span></div>
-<div class="info-row"><span class="info-label">Capital One Conf</span><span class="conf-code">H-LRU-HWE</span></div>
+{title:'Travel',icon:'plane',body:`<div style="font-weight:700;color:var(--gold);margin-bottom:8px">OUTBOUND -- Fri Apr 17</div>
+<div class="info-row"><span class="info-label">Flight</span><span class="info-value">Alaska 208 (Nonstop, 6h 13m)</span></div>
+<div class="info-row"><span class="info-label">Depart</span><span class="info-value">JFK 11:30 AM</span></div>
+<div class="info-row"><span class="info-label">Arrive</span><span class="info-value">Palm Springs (PSP) 2:43 PM</span></div>
+<div style="font-weight:700;color:var(--gold);margin:12px 0 8px">RETURN -- Mon Apr 20</div>
+<div class="info-row"><span class="info-label">Leg 1</span><span class="info-value">Alaska 533 -- PSP 6:04 PM -> Seattle 9:03 PM (2h 59m)</span></div>
+<div class="info-row"><span class="info-label">Leg 2</span><span class="info-value">Alaska 22 -- Seattle 10:53 PM -> JFK 7:12 AM Tue Apr 21 (5h 19m)</span></div>
+<div class="info-row"><span class="info-label">Layover</span><span class="info-value">1h 50m in Seattle (SEA)</span></div>
+<div style="font-weight:700;color:var(--fri);margin:12px 0 8px">CONFIRMATIONS</div>
+<div class="info-row"><span class="info-label">Mavvie (Alaska)</span><span class="conf-code">MBZMCK</span></div>
+<div class="info-row"><span class="info-label">Stefania (Alaska)</span><span class="conf-code">CWIJSL</span></div>
+<div class="info-row"><span class="info-label">Capital One Travel</span><span class="conf-code">H-LRU-HWE</span></div>
 <div class="info-row"><span class="info-label">JFK Terminal</span><span class="info-value">Terminal 8 (Alaska)</span></div>
 <div style="margin-top:10px"><strong>Capital One Lounge:</strong> Terminal 4 (need AirTrain from T8, ~15 min). Guest fee: $45/person since Feb 2026 policy change. Up to you if worth the terminal hop.</div>
 <div style="margin-top:8px"><strong>TWA Hotel:</strong> Terminal 5, open to public. Paris Cafe breakfast 7-11 AM, Fly-By Bagels 5 AM-12 PM. AirTrain from T8. Doable if you get to JFK by ~8:30 AM (gives you ~1.5 hrs before boarding).</div>`},
@@ -1950,7 +1958,7 @@ function renderCountdown() {
       <div class="cd-unit"><div class="cd-val">${mins}</div><div class="cd-lbl">MIN</div></div>
       <div class="cd-unit"><div class="cd-val">${secs}</div><div class="cd-lbl">SEC</div></div>
     </div>
-    <div class="cd-sub">Alaska AS2A -- JFK 11:30 AM to Palm Springs 2:43 PM</div>
+    <div class="cd-sub">Alaska 208 -- JFK 11:30 AM to Palm Springs 2:43 PM</div>
   </div>`;
 }
 
