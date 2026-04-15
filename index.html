@@ -328,6 +328,40 @@ body.light-mode .app-header h1{
   margin-left:auto;padding:4px;
 }
 .install-banner.hidden{display:none}
+/* ── Share / Add Bar ── */
+.action-bar{display:flex;gap:8px;margin:0 14px 10px}
+.action-btn{
+  flex:1;padding:10px 12px;border-radius:12px;font-size:.72rem;font-weight:700;
+  cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:6px;
+  transition:all .2s;border:1px solid;
+}
+.action-btn.share{background:rgba(255,215,0,.08);border-color:rgba(255,215,0,.25);color:var(--gold)}
+.action-btn.share:hover{background:rgba(255,215,0,.15)}
+.action-btn.add-home{background:rgba(0,212,255,.06);border-color:rgba(0,212,255,.2);color:var(--fri)}
+.action-btn.add-home:hover{background:rgba(0,212,255,.1)}
+.action-btn svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+/* ── Geo Dot ── */
+.geo-dot{
+  position:absolute;width:14px;height:14px;z-index:10;
+  transform:translate(-50%,-50%);pointer-events:none;
+  transition:left .8s ease,top .8s ease;
+}
+.geo-dot::before{
+  content:'';position:absolute;inset:0;border-radius:50%;
+  background:var(--green);box-shadow:0 0 8px var(--green);
+}
+.geo-dot::after{
+  content:'';position:absolute;inset:-4px;border-radius:50%;
+  border:2px solid var(--green);opacity:.5;
+  animation:geo-pulse 2s ease infinite;
+}
+@keyframes geo-pulse{0%{transform:scale(1);opacity:.5}100%{transform:scale(2.2);opacity:0}}
+.geo-label{
+  position:absolute;top:16px;left:50%;transform:translateX(-50%);
+  font-size:.5rem;font-weight:800;color:var(--green);letter-spacing:.5px;
+  white-space:nowrap;background:rgba(10,10,10,.8);padding:1px 5px;border-radius:4px;
+}
+.geo-status{font-size:.55rem;color:var(--dim);text-align:center;margin-top:4px}
 /* ── Mode Toggle ── */
 .mode-toggle{
   position:absolute;right:14px;top:50%;transform:translateY(-50%);
@@ -390,10 +424,16 @@ body.light-mode .app-header h1{
   </button>
 </header>
 
-<!-- Install Banner -->
-<div class="install-banner" id="install-banner">
-  <strong>Add to Home Screen</strong> for the full app experience -- tap Share then "Add to Home Screen"
-  <button class="dismiss" onclick="dismissInstall()">&times;</button>
+<!-- Action Bar -->
+<div class="action-bar">
+  <button class="action-btn share" onclick="shareApp()">
+    <svg viewBox="0 0 24 24"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+    SHARE
+  </button>
+  <button class="action-btn add-home" onclick="addToHome()">
+    <svg viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12" y2="18.01"/></svg>
+    ADD TO PHONE
+  </button>
 </div>
 
 <!-- TAB: SCHEDULE -->
@@ -845,7 +885,9 @@ const INFO_SECTIONS = [
   <span class="map-walk" style="left:30%;top:55%">8min</span>
   <span class="map-walk" style="left:12%;top:70%">10min</span>
   <span class="map-walk" style="left:50%;top:10%;font-size:.45rem;opacity:.5">-- 12 min end to end --</span>
+  <div class="geo-dot" id="geo-dot" style="display:none"><span class="geo-label">YOU</span></div>
 </div>
+<div class="geo-status" id="geo-status"></div>
 <div class="map-legend">Approximate walking times between stages. MAIN to SAHARA = 12 min across the whole field.</div>
 </div>`},
 {title:'Rest Areas, Water & Chill Spots',icon:'chill',body:`<div style="color:var(--gold);font-weight:700;margin-bottom:8px">Where to cool down, hydrate, and recover:</div>
@@ -1581,18 +1623,82 @@ function restoreMode() {
 }
 
 // ═══════════════════════════════════════
-// INSTALL BANNER
+// SHARE & ADD TO HOME
 // ═══════════════════════════════════════
-function dismissInstall() {
-  document.getElementById('install-banner').classList.add('hidden');
-  localStorage.setItem('chq_install_dismissed', '1');
-}
-function checkInstallBanner() {
-  const dismissed = localStorage.getItem('chq_install_dismissed');
-  const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
-  if (dismissed || isStandalone) {
-    document.getElementById('install-banner').classList.add('hidden');
+function shareApp() {
+  const url = 'https://mavvie-droid.github.io/coachella-hq/';
+  if (navigator.share) {
+    navigator.share({ title: 'PALMCHELLA', text: 'Our Coachella Weekend 2 guide!', url }).catch(() => {});
+  } else {
+    navigator.clipboard.writeText(url).then(() => {
+      const btn = document.querySelector('.action-btn.share');
+      btn.textContent = 'COPIED!';
+      setTimeout(() => { btn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg> SHARE'; }, 1500);
+    });
   }
+}
+function addToHome() {
+  const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+  const isAndroid = /android/i.test(navigator.userAgent);
+  if (isIOS) {
+    alert('Tap the Share button (box with arrow) in Safari\'s bottom bar, then scroll down and tap "Add to Home Screen"');
+  } else if (isAndroid) {
+    alert('Tap the three-dot menu in Chrome, then tap "Add to Home Screen" or "Install App"');
+  } else {
+    alert('In your browser menu, look for "Install App" or "Add to Home Screen"');
+  }
+}
+
+// ═══════════════════════════════════════
+// GEOLOCATION ON STAGE MAP
+// ═══════════════════════════════════════
+// Approximate Coachella venue bounds (Empire Polo Club)
+const VENUE = {
+  north: 33.6828, south: 33.6772,
+  west: -116.2418, east: -116.2332
+};
+let geoWatchId = null;
+
+function startGeo() {
+  if (!navigator.geolocation) return;
+  geoWatchId = navigator.geolocation.watchPosition(
+    pos => updateGeoDot(pos.coords.latitude, pos.coords.longitude, pos.coords.accuracy),
+    err => {
+      const el = document.getElementById('geo-status');
+      if (err.code === 1) el.textContent = 'Location access denied. Enable in Settings to see your position.';
+      else el.textContent = '';
+    },
+    { enableHighAccuracy: true, maximumAge: 10000, timeout: 15000 }
+  );
+}
+
+function updateGeoDot(lat, lng, accuracy) {
+  const dot = document.getElementById('geo-dot');
+  const status = document.getElementById('geo-status');
+
+  // Check if within venue bounds (with some padding)
+  const pad = 0.002; // ~200m buffer
+  const inVenue = lat >= VENUE.south - pad && lat <= VENUE.north + pad &&
+                  lng >= VENUE.west - pad && lng <= VENUE.east + pad;
+
+  if (!inVenue) {
+    dot.style.display = 'none';
+    status.textContent = 'You\'re not at the venue yet. The green dot will appear when you\'re on the grounds.';
+    return;
+  }
+
+  // Map lat/lng to percentage position on the map
+  const xPct = ((lng - VENUE.west) / (VENUE.east - VENUE.west)) * 100;
+  const yPct = ((VENUE.north - lat) / (VENUE.north - VENUE.south)) * 100;
+
+  // Clamp to map bounds
+  const x = Math.max(5, Math.min(95, xPct));
+  const y = Math.max(5, Math.min(95, yPct));
+
+  dot.style.display = 'block';
+  dot.style.left = x + '%';
+  dot.style.top = y + '%';
+  status.textContent = accuracy < 30 ? 'Live location (GPS)' : `Live location (~${Math.round(accuracy)}m accuracy)`;
 }
 
 // ═══════════════════════════════════════
@@ -1670,7 +1776,7 @@ if ('serviceWorker' in navigator) {
 // ═══════════════════════════════════════
 function init() {
   restoreMode();
-  checkInstallBanner();
+  startGeo();
 
   // Auto-select today if during festival
   const today = getTodayDay();
