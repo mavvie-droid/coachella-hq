@@ -1,34 +1,25 @@
-const CACHE = 'palmchella-v1';
-const URLS = [
-  '/coachella-hq/',
-  '/coachella-hq/index.html',
-  '/coachella-hq/icon.svg',
-  '/coachella-hq/manifest.json'
-];
+const CACHE = 'palmchella-v2';
 
 self.addEventListener('install', e => {
-  e.waitUntil(caches.open(CACHE).then(c => c.addAll(URLS)));
   self.skipWaiting();
 });
 
 self.addEventListener('activate', e => {
   e.waitUntil(
     caches.keys().then(keys =>
-      Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)))
+      Promise.all(keys.map(k => caches.delete(k)))
     )
   );
   self.clients.claim();
 });
 
+// Network first: always try fresh, cache as backup for offline
 self.addEventListener('fetch', e => {
   e.respondWith(
-    caches.match(e.request).then(r => {
-      if (r) return r;
-      return fetch(e.request).then(resp => {
-        const clone = resp.clone();
-        caches.open(CACHE).then(c => c.put(e.request, clone));
-        return resp;
-      }).catch(() => caches.match('/coachella-hq/index.html'));
-    })
+    fetch(e.request).then(resp => {
+      const clone = resp.clone();
+      caches.open(CACHE).then(c => c.put(e.request, clone));
+      return resp;
+    }).catch(() => caches.match(e.request))
   );
 });
