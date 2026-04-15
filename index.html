@@ -3,7 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>CoachellaHQ</title>
+<meta name="theme-color" content="#FFD700">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Palmchella">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon.svg">
+<title>PALMCHELLA</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 :root{
@@ -295,6 +302,77 @@ body{
 .gold-text{color:var(--gold)}
 .mb-8{margin-bottom:8px}
 .mt-12{margin-top:12px}
+/* ── Light Mode ── */
+body.light-mode{
+  background:#f5f5f0;
+  --bg:#f5f5f0;--bg2:#ffffff;--text:#1a1a1a;
+  --dim:rgba(0,0,0,.4);--desc:rgba(0,0,0,.55);
+  --border:rgba(0,0,0,.1);--card:rgba(0,0,0,.03);--card-hover:rgba(0,0,0,.06);
+}
+body.light-mode .app-header{background:rgba(245,245,240,.92)}
+body.light-mode .bottom-nav{background:rgba(245,245,240,.95)}
+body.light-mode .app-header h1{
+  background:linear-gradient(135deg,#B8860B,#996515,#B8860B);
+  -webkit-background-clip:text;background-clip:text;
+}
+/* ── Install Banner ── */
+.install-banner{
+  background:linear-gradient(135deg,rgba(255,215,0,.08),rgba(0,212,255,.05));
+  border:1px solid rgba(255,215,0,.15);border-radius:12px;
+  padding:12px 14px;margin:0 14px 10px;display:flex;align-items:center;gap:10px;
+  font-size:.75rem;color:var(--desc);
+}
+.install-banner strong{color:var(--gold)}
+.install-banner .dismiss{
+  background:none;border:none;color:var(--dim);cursor:pointer;font-size:1.1rem;
+  margin-left:auto;padding:4px;
+}
+.install-banner.hidden{display:none}
+/* ── Mode Toggle ── */
+.mode-toggle{
+  position:absolute;right:14px;top:50%;transform:translateY(-50%);
+  background:none;border:1px solid var(--border);border-radius:8px;
+  padding:4px 8px;cursor:pointer;color:var(--dim);font-size:.8rem;
+  transition:all .2s;
+}
+.mode-toggle:hover{border-color:rgba(255,215,0,.3);color:var(--gold)}
+/* ── Stage Map ── */
+.stage-map{padding:8px 0}
+.map-container{
+  position:relative;width:100%;aspect-ratio:4/3;max-width:500px;margin:0 auto;
+  background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:16px;
+  overflow:hidden;
+}
+.map-stage{
+  position:absolute;padding:6px 10px;border-radius:10px;font-size:.6rem;
+  font-weight:700;letter-spacing:.5px;text-align:center;white-space:nowrap;
+  border:1px solid;cursor:default;transition:all .2s;z-index:2;
+}
+.map-stage:hover{transform:scale(1.08)}
+.map-stage.main{background:rgba(255,215,0,.1);border-color:rgba(255,215,0,.25);color:var(--gold);left:8%;top:12%}
+.map-stage.outdoor{background:rgba(255,215,0,.06);border-color:rgba(255,215,0,.15);color:var(--gold);left:8%;top:42%}
+.map-stage.gobi{background:rgba(168,85,247,.08);border-color:rgba(168,85,247,.2);color:var(--sat);left:38%;top:30%}
+.map-stage.mojave{background:rgba(168,85,247,.08);border-color:rgba(168,85,247,.2);color:var(--sat);left:55%;top:30%}
+.map-stage.sahara{background:rgba(255,59,139,.08);border-color:rgba(255,59,139,.2);color:var(--sun);right:8%;top:12%}
+.map-stage.sonora{background:rgba(255,255,255,.05);border-color:var(--border);color:var(--dim);left:20%;bottom:10%}
+.map-stage.yuma{background:rgba(0,212,255,.08);border-color:rgba(0,212,255,.2);color:var(--fri);right:18%;top:50%}
+.map-stage.quasar{background:rgba(0,212,255,.08);border-color:rgba(0,212,255,.2);color:var(--fri);right:8%;top:72%}
+.map-walk{
+  position:absolute;font-size:.5rem;color:var(--dim);font-weight:600;
+  background:rgba(10,10,10,.7);padding:1px 4px;border-radius:4px;z-index:3;
+}
+.map-legend{font-size:.6rem;color:var(--dim);text-align:center;margin-top:8px}
+/* ── Now Card ── */
+.now-card{
+  background:linear-gradient(135deg,rgba(255,215,0,.06),rgba(255,215,0,.02));
+  border:1px solid rgba(255,215,0,.2);border-radius:16px;
+  padding:14px;margin-bottom:14px;
+}
+.now-card .now-label{font-size:.6rem;font-weight:700;letter-spacing:2px;color:var(--gold);margin-bottom:8px}
+.now-card .now-artist{font-size:1rem;font-weight:800}
+.now-card .now-meta{font-size:.72rem;color:var(--desc);margin-top:2px}
+.now-card .now-next{margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,215,0,.1)}
+.now-card .now-next-label{font-size:.55rem;font-weight:700;letter-spacing:1.5px;color:var(--dim)}
 @media(min-width:700px){
   .tab{padding:16px 20px 24px}
   .set-card{padding:14px 18px}
@@ -304,10 +382,19 @@ body{
 </head>
 <body>
 
-<header class="app-header">
-  <h1>COACHELLA HQ</h1>
+<header class="app-header" style="position:relative">
+  <h1>PALMCHELLA</h1>
   <div class="header-line"></div>
+  <button class="mode-toggle" onclick="toggleMode()" title="Toggle light/dark mode">
+    <span id="mode-icon">&#9788;</span>
+  </button>
 </header>
+
+<!-- Install Banner -->
+<div class="install-banner" id="install-banner">
+  <strong>Add to Home Screen</strong> for the full app experience -- tap Share then "Add to Home Screen"
+  <button class="dismiss" onclick="dismissInstall()">&times;</button>
+</div>
 
 <!-- TAB: SCHEDULE -->
 <div class="tab active" id="tab-schedule">
@@ -330,6 +417,7 @@ body{
     <div style="font-size:.65rem;font-weight:700;letter-spacing:2px;color:var(--gold)">YOUR ITINERARY</div>
     <div style="font-size:.6rem;color:var(--dim);margin-top:2px">Combined picks with walking directions</div>
   </div>
+  <div id="now-section"></div>
   <div id="plan-list"></div>
 </div>
 
@@ -738,6 +826,45 @@ stefania:[
 
 // ── INFO DATA ──
 const INFO_SECTIONS = [
+{title:'Stage Map & Walking Times',icon:'map',body:`<div class="stage-map">
+<div class="map-container">
+  <div class="map-stage main">MAIN<br>STAGE</div>
+  <div class="map-stage outdoor">OUTDOOR<br>THEATRE</div>
+  <div class="map-stage gobi">GOBI</div>
+  <div class="map-stage mojave">MOJAVE</div>
+  <div class="map-stage sahara">SAHARA</div>
+  <div class="map-stage sonora">SONORA</div>
+  <div class="map-stage yuma">YUMA</div>
+  <div class="map-stage quasar">QUASAR</div>
+  <span class="map-walk" style="left:18%;top:30%">5min</span>
+  <span class="map-walk" style="left:30%;top:20%">8min</span>
+  <span class="map-walk" style="left:48%;top:22%">3min</span>
+  <span class="map-walk" style="left:68%;top:20%">8min</span>
+  <span class="map-walk" style="right:14%;top:38%">5min</span>
+  <span class="map-walk" style="right:14%;top:62%">5min</span>
+  <span class="map-walk" style="left:30%;top:55%">8min</span>
+  <span class="map-walk" style="left:12%;top:70%">10min</span>
+  <span class="map-walk" style="left:50%;top:10%;font-size:.45rem;opacity:.5">-- 12 min end to end --</span>
+</div>
+<div class="map-legend">Approximate walking times between stages. MAIN to SAHARA = 12 min across the whole field.</div>
+</div>`},
+{title:'Rest Areas, Water & Chill Spots',icon:'chill',body:`<div style="color:var(--gold);font-weight:700;margin-bottom:8px">Where to cool down, hydrate, and recover:</div>
+<ul>
+<li><strong>VIP Lounges (12 Peaks + Rose Garden):</strong> Air-conditioned restrooms, shaded seating, full bars, specialty food. Your VIP wristband gets you in.</li>
+<li><strong>Artist Compound:</strong> Open bar, shaded lounges, private area. Your best chill spot. Ask Stef's team about exact location backstage.</li>
+<li><strong>Red Bull Mirage:</strong> Shaded seating, misting fans on ground level. Free slushies at 3 PM. The upper levels are even nicer (sign up for texts).</li>
+<li><strong>Postmates Pit Stop:</strong> AIR CONDITIONED escape lounge. This is your go-to for AC when you need it.</li>
+<li><strong>Alaska Airlines Experience:</strong> Free cold drinks, snacks, WiFi, phone charging. Another great rest spot.</li>
+<li><strong>Always & Secret Refresh Rooms:</strong> Hydration station and glam room. Free samples. Quick refresh break.</li>
+<li><strong>Skechers Lounge:</strong> Chill spot to sit and recover.</li>
+<li><strong>Starbucks Coffeehouse:</strong> Shaded, free drinks. Good morning rest spot.</li>
+<li><strong>Water Refill Stations:</strong> FREE filtered water at multiple stations across the venue. Bring your reusable bottle, refill often. Look for the large water towers on the map.</li>
+<li><strong>Neutrogena Sunscreen Dispensers:</strong> 8 free dispensers around the grounds. Hit one every time you pass.</li>
+<li><strong>VIP Tiki Bar:</strong> Hidden by Lake Medjhool. Serene, shaded, VIP only. Perfect escape when you need quiet.</li>
+<li><strong>Record Safari:</strong> Air-conditioned store with 25K+ vinyl. Browse and cool off.</li>
+</ul>
+<div style="margin-top:8px;color:var(--orange);font-weight:600">Note: There is NO swimming pool inside the festival. Pool parties are off-site only (Goldenvoice Surf Club, your hotel pool, etc.).</div>
+<div style="margin-top:6px"><strong>Open bar:</strong> Artist Compound only (free drinks backstage). VIP has bars but you pay.</div>`},
 {title:'Your Passes',icon:'ticket',body:`<ul>
 <li><strong>VIP:</strong> Dedicated viewing areas near Main Stage and Outdoor Theatre. Air-conditioned restrooms. Shaded lounges with seating, specialty food/drink vendors, full bars. VIP-exclusive merch store in 12 Peaks area.</li>
 <li><strong>Artist Compound:</strong> Private backstage retreat with open bars, shaded lounges, and direct pathways to artist spaces. This is through Stefania's Lady Gaga / David Byrne team. Ask Stef to confirm if golf cart access is included.</li>
@@ -1438,15 +1565,120 @@ function switchTab(tab) {
 }
 
 // ═══════════════════════════════════════
+// LIGHT / DARK MODE
+// ═══════════════════════════════════════
+function toggleMode() {
+  document.body.classList.toggle('light-mode');
+  const isLight = document.body.classList.contains('light-mode');
+  localStorage.setItem('chq_mode', isLight ? 'light' : 'dark');
+  document.getElementById('mode-icon').textContent = isLight ? '\u263E' : '\u2606';
+}
+function restoreMode() {
+  if (localStorage.getItem('chq_mode') === 'light') {
+    document.body.classList.add('light-mode');
+    document.getElementById('mode-icon').textContent = '\u263E';
+  }
+}
+
+// ═══════════════════════════════════════
+// INSTALL BANNER
+// ═══════════════════════════════════════
+function dismissInstall() {
+  document.getElementById('install-banner').classList.add('hidden');
+  localStorage.setItem('chq_install_dismissed', '1');
+}
+function checkInstallBanner() {
+  const dismissed = localStorage.getItem('chq_install_dismissed');
+  const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+  if (dismissed || isStandalone) {
+    document.getElementById('install-banner').classList.add('hidden');
+  }
+}
+
+// ═══════════════════════════════════════
+// WHAT'S HAPPENING NOW
+// ═══════════════════════════════════════
+function renderNowSection() {
+  const el = document.getElementById('now-section');
+  const today = getTodayDay();
+  if (!today) {
+    // Not festival day -- show countdown
+    el.innerHTML = `<div class="now-card">
+      <div class="now-label">COACHELLA WEEKEND 2</div>
+      <div class="now-artist">April 18-20, 2026</div>
+      <div class="now-meta">Gates open at 11 AM PT each day. Your flight lands April 17 at 2:43 PM.</div>
+    </div>`;
+    return;
+  }
+
+  const now = getNowMins();
+  const sets = SCHEDULE[today].filter(s => mavvieFavs.has(s.id) || stefFavs.has(s.id));
+  sets.sort((a,b) => a.start - b.start);
+
+  const liveSets = sets.filter(s => !s.tbd && s.start <= now && s.end > now);
+  const nextSets = sets.filter(s => !s.tbd && s.start > now);
+  const nextSet = nextSets[0];
+
+  let html = '<div class="now-card"><div class="now-label">RIGHT NOW</div>';
+
+  if (liveSets.length > 0) {
+    liveSets.forEach(s => {
+      html += `<div class="now-artist">${s.artist} <span class="badge badge-live">LIVE</span></div>`;
+      html += `<div class="now-meta">${s.stage} -- ends at ${fmtTime(s.end)}</div>`;
+    });
+  } else {
+    html += '<div class="now-meta" style="color:var(--dim)">No favorited sets playing right now</div>';
+  }
+
+  if (nextSet) {
+    const minsUntil = nextSet.start - now;
+    html += '<div class="now-next">';
+    html += `<div class="now-next-label">UP NEXT -- in ${minsUntil} min</div>`;
+    html += `<div class="now-artist" style="font-size:.85rem;margin-top:4px">${nextSet.artist}</div>`;
+    html += `<div class="now-meta">${nextSet.stage} at ${fmtTime(nextSet.start)}</div>`;
+    html += '</div>';
+  }
+
+  // Free stuff available now
+  const freeNow = [];
+  if (now >= 13*60 && now < 21*60) freeNow.push('Starbucks free drinks');
+  if (now >= 15*60) freeNow.push('Red Bull Mirage free slushies');
+  if (now >= 13*60 && now < 20*60+30) freeNow.push('e.l.f. free products (by Gobi)');
+  if (now >= 13*60 && now < 21*60) freeNow.push('Sol de Janeiro free samples');
+  if (now >= 13*60) freeNow.push('Barbie Charm Bar, Pinterest, Google Gemini photobooths');
+
+  if (freeNow.length > 0) {
+    html += '<div class="now-next" style="border-top-color:rgba(34,197,94,.15)">';
+    html += '<div class="now-next-label" style="color:var(--green)">FREE STUFF AVAILABLE NOW</div>';
+    html += `<div class="now-meta" style="margin-top:4px">${freeNow.join(' / ')}</div>`;
+    html += '</div>';
+  }
+
+  html += '</div>';
+  el.innerHTML = html;
+}
+
+// ═══════════════════════════════════════
+// SERVICE WORKER
+// ═══════════════════════════════════════
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js').catch(() => {});
+}
+
+// ═══════════════════════════════════════
 // INIT
 // ═══════════════════════════════════════
 function init() {
+  restoreMode();
+  checkInstallBanner();
+
   // Auto-select today if during festival
   const today = getTodayDay();
   if (today) setDay(today);
 
   renderStageFilters();
   renderSchedule();
+  renderNowSection();
   renderPlan();
   renderExploreCats();
   renderExplore();
@@ -1454,10 +1686,10 @@ function init() {
   renderInfo();
   initNotifs();
 
-  // Update live badges every minute
+  // Update live badges and now section every minute
   setInterval(() => {
     if (currentTab === 'schedule') renderSchedule();
-    if (currentTab === 'plan') renderPlan();
+    if (currentTab === 'plan') { renderNowSection(); renderPlan(); }
   }, 60000);
 }
 

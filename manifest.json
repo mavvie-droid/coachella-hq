@@ -1,0 +1,14 @@
+{
+  "name": "PALMCHELLA - Coachella W2 Guide",
+  "short_name": "Palmchella",
+  "description": "Coachella Weekend 2 companion app for Mavvie & Stefania",
+  "start_url": "/coachella-hq/",
+  "display": "standalone",
+  "background_color": "#0a0a0a",
+  "theme_color": "#FFD700",
+  "orientation": "portrait",
+  "icons": [
+    {"src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any"},
+    {"src": "icon.svg", "sizes": "512x512", "type": "image/svg+xml", "purpose": "maskable"}
+  ]
+}
